@@ -1,0 +1,62 @@
+<div class="h-screen bg-gradient-to-br from-indigo-900 to-stone-900 absolute top-0 left-0 w-full"></div>
+<h1 class="absolute left-1/4 top-40 text-3xl centrar text-white mb-4">
+    Contrata y se contratado!
+</h1>
+<div class="p-4 rounded-md bg-white z-10 absolute w-1/3 top-1/2 left-1/4 centrar text-center
+            border-2 border-violet-900 mt-4">
+    <h1 class="text-2xl text-indigo-900 mt-2">Autenticarse</h1>
+    <form class="text-start p-2 animate-fadeIn" *ngIf="login">
+        <div class="mt-4 text-left">
+            <label for="username" class="block text-sm font-medium text-gray-600">Nombre de Usuario</label>
+            <input type="text" class="rounded-md border border-color-gray p-2 w-full transition duration-500
+             focus:border-violet-800 focus:outline-none mt-1" placeholder="Ingrese el nombre de usuario">
+        </div>
+        <div class="mt-4 text-left">
+            <label for="password" class="block text-sm font-medium text-gray-600">Contraseña</label>
+            <input type="password" class="rounded-md mt-1 w-full border border-color-gray p-2 transition duration-500
+             focus:border-violet-800 focus:outline-none" placeholder="Ingrese la contraseña">
+        </div>
+        <button *ngIf="login" type="submit" class="bg-indigo-500 text-white mt-8 p-2 rounded-md hover:bg-indigo-600 
+        w-full transition-colors duration-300">Iniciar Sesión</button>
+    </form>
+    <form class="text-start p-2 animate-fadeIn" *ngIf="!login">
+        <div class="mt-4 text-left">
+            <label for="username" class="block text-sm font-medium text-gray-600">Nombre de Usuario</label>
+            <input type="text" class="rounded-md border border-color-gray p-2 w-full transition duration-500
+             focus:border-violet-800 focus:outline-none mt-1" placeholder="Ingrese el nombre de usuario">
+        </div>
+        <div class="mt-4 text-left">
+            <label for="username" class="block text-sm font-medium text-gray-600">Email</label>
+            <input type="text" class="rounded-md border border-color-gray p-2 w-full transition duration-500
+             focus:border-violet-800 focus:outline-none mt-1" placeholder="Ingrese su correo">
+        </div>
+        <div class="mt-4 text-left">
+            <label for="password" class="block text-sm font-medium text-gray-600">Contraseña</label>
+            <input type="password" class="rounded-md mt-1 w-full border border-color-gray p-2 transition duration-500
+             focus:border-violet-800 focus:outline-none" placeholder="Ingrese la contraseña">
+        </div>
+        <div class="mt-4 text-left">
+            <label for="password" class="block text-sm font-medium text-gray-600">Confirmacion de la contraseña</label>
+            <input type="password" class="rounded-md mt-1 w-full border border-color-gray p-2 transition duration-500
+             focus:border-violet-800 focus:outline-none" placeholder="Confirme la contraseña">
+        </div>
+        <div class="mt-4 text-left">
+            <label for="role" class="block text-sm font-medium text-gray-600">¿Que buscas?</label>
+            <select id="role" name="role" class="form-select rounded-md mt-1 w-full 
+            border border-color-gray p-2 transition duration-500
+            focus:border-violet-800 focus:outline-none ">
+                <option value="empleado">Ser contratado</option>
+                <option value="empleador">Contratar</option>
+            </select>
+        </div>
+        <button type="submit" class="bg-indigo-500 text-white mt-8 p-2 rounded-md hover:bg-indigo-600 
+        w-full transition-colors duration-300">Registrarse</button>
+    </form>
+    <p class="mt-4" *ngIf="login">No tiene una cuenta? <span class="ms-2 cursor-pointer text-indigo-500
+            transition-colors duration-300 hover:text-indigo-800" (click)="toggleLogin()">Registrarse</span></p>
+    <p class="mt-4" *ngIf="!login">Ya tiene una cuenta? <span class="ms-2 cursor-pointer text-indigo-500
+                transition-colors duration-300 hover:text-indigo-800" (click)="toggleLogin()">Iniciar sesion</span></p>
+</div>
+<div class="z-20 absolute w-3/6 right-0 text-center">
+    <img src="../../../assets/img/banner.jpg" class="w-max h-screen object-center object-cover grayscale" alt="">
+</div>
