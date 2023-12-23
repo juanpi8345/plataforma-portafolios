@@ -4,19 +4,31 @@
         <h1 class="text-5xl text-white text-center">Talent<span class="text-indigo-300 font-medium">H</span>ub</h1>
         <div class="p-4 rounded-md bg-white text-center border-2 border-violet-900 mt-10">
             <h1 class="text-2xl text-indigo-900 mt-2">Autenticarse</h1>
-            <form class="text-start p-2 animate-fadeIn" *ngIf="login">
+            <form class="text-start p-2 animate-fadeIn" *ngIf="login" [formGroup]="loginForm"
+            (ngSubmit)="authenticate()">
                 <div class="mt-4 text-left">
                     <label for="username" class="block text-sm font-medium text-gray-600">Nombre de Usuario</label>
                     <input type="text" class="rounded-md border border-color-gray p-2 w-full transition duration-500
-         focus:border-violet-800 focus:outline-none mt-1" placeholder="Ingrese el nombre de usuario">
+         focus:border-violet-800 focus:outline-none mt-1" placeholder="Ingrese el nombre de usuario"
+         [ngClass]="{'border-red': loginForm.get('username')?.invalid && loginForm.get('username')?.touched }"
+                        formControlName="username">
+                    <div *ngIf="loginForm.get('username')?.hasError('required') &&
+         loginForm.get('username')?.touched" class="text-sm text-red-500 mt-2">
+                        Por favor ingresa tu nombre de usuario
+                    </div>
                 </div>
                 <div class="mt-4 text-left">
                     <label for="password" class="block text-sm font-medium text-gray-600">Contraseña</label>
                     <input type="password" class="rounded-md mt-1 w-full border border-color-gray p-2 transition duration-500
-         focus:border-violet-800 focus:outline-none" placeholder="Ingrese la contraseña">
+         focus:border-violet-800 focus:outline-none" placeholder="Ingrese la contraseña" formControlName="password"
+         [ngClass]="{'border-red': loginForm.get('password')?.invalid && loginForm.get('password')?.touched }">
+         <div *ngIf="loginForm.get('password')?.hasError('required') &&
+         loginForm.get('password')?.touched" class="text-sm text-red-500 mt-2">
+                        Por favor ingresa tu contraseña
+                    </div>
                 </div>
-                <button *ngIf="login" type="submit" class="bg-indigo-500 text-white mt-8 p-2 rounded-md hover:bg-indigo-600 
-    w-full transition-colors duration-300">Iniciar Sesión</button>
+                <button *ngIf="login" [disabled]="loginForm.invalid" type="submit" class="bg-indigo-500 text-white mt-8 p-2 rounded-md hover:bg-indigo-600 
+    w-full transition-colors duration-300" [ngClass]="{'disabled': loginForm.invalid}">Iniciar Sesión</button>
             </form>
             <form class="text-start p-2 animate-fadeIn" *ngIf="!login" [formGroup]="registerForm"
                 (ngSubmit)="registerUser()">
@@ -38,8 +50,9 @@
                 <div class="mt-4 text-left">
                     <label for="username" class="block text-sm font-medium text-gray-600">Email</label>
                     <input type="text" class="rounded-md border border-color-gray p-2 w-full transition duration-500
-         focus:border-violet-800 focus:outline-none mt-1" placeholder="Ingrese su correo" formControlName="email" email=""
-         [ngClass]="{'border-red': registerForm.get('email')?.invalid && registerForm.get('email')?.touched }">
+         focus:border-violet-800 focus:outline-none mt-1" placeholder="Ingrese su correo" formControlName="email"
+                        email=""
+                        [ngClass]="{'border-red': registerForm.get('email')?.invalid && registerForm.get('email')?.touched }">
                     <div *ngIf="registerForm.get('email')?.hasError('required') &&
          registerForm.get('email')?.touched" class="text-sm text-red-500 mt-2">
                         El email es obligatorio
@@ -52,8 +65,9 @@
                 <div class="mt-4 text-left">
                     <label for="password" class="block text-sm font-medium text-gray-600">Contraseña</label>
                     <input type="password" class="rounded-md mt-1 w-full border border-color-gray p-2 transition duration-500
-         focus:border-violet-800 focus:outline-none" placeholder="Ingrese la contraseña" formControlName="password" minlength="6"
-         [ngClass]="{'border-red': registerForm.get('password')?.invalid && registerForm.get('password')?.touched }">
+         focus:border-violet-800 focus:outline-none" placeholder="Ingrese la contraseña" formControlName="password"
+                        minlength="6"
+                        [ngClass]="{'border-red': registerForm.get('password')?.invalid && registerForm.get('password')?.touched }">
                 </div>
                 <div *ngIf="registerForm.get('password')?.hasError('required') &&
                 registerForm.get('password')?.touched" class="text-sm text-red-500 mt-2">
@@ -71,15 +85,16 @@
                         formControlName="passwordConfirm" (input)="comparePasswords()"
                         [ngClass]="{'border-red': registerForm.get('passwordConfirm')?.invalid && registerForm.get('passwordConfirm')?.touched }"
                         [ngClass]="{'border-red':  !isEqual && registerForm.get('passwordConfirm')?.touched }">
-                        
-                        <div *ngIf="
+
+                    <div *ngIf="
                         registerForm.get('passwordConfirm')?.touched && registerForm.get('passwordConfirm')?.hasError('required')"
-                         class="text-sm text-red-500 mt-2">
-                            Tenes que confirmar la contraseña
-                        </div>
-                        <div *ngIf="registerForm.get('passwordConfirm')?.touched && !isEqual" class="text-sm text-red-500 mt-2">
-                            Las contraseñas no coinciden
-                        </div>
+                        class="text-sm text-red-500 mt-2">
+                        Tenes que confirmar la contraseña
+                    </div>
+                    <div *ngIf="registerForm.get('passwordConfirm')?.touched && !isEqual"
+                        class="text-sm text-red-500 mt-2">
+                        Las contraseñas no coinciden
+                    </div>
                 </div>
                 <div class="mt-4 text-left">
                     <label for="role" class="block text-sm font-medium text-gray-600">¿Que buscas?</label>
@@ -92,7 +107,7 @@
                 </div>
                 <button type="submit" class="bg-indigo-500 text-white mt-8 p-2 rounded-md hover:bg-indigo-600 
     w-full transition-colors duration-300" [disabled]="registerForm.invalid"
-    [ngClass]="{'disabled': registerForm.invalid || !isEqual}">Registrarse</button>
+                    [ngClass]="{'disabled': registerForm.invalid || !isEqual}">Registrarse</button>
             </form>
             <p class="mt-4" *ngIf="login">No tiene una cuenta? <span class="ms-2 cursor-pointer text-indigo-500
         transition-colors duration-300 hover:text-indigo-800" (click)="toggleLogin()">Registrarse</span></p>

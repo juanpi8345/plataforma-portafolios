@@ -5,6 +5,7 @@ import { FormBuilder, FormControl, FormGroup, MinLengthValidator, ReactiveFormsM
 import { AuthService } from '../../services/auth.service';
 import { UserDTO } from '../../model/user-dto';
 import Swal from 'sweetalert2';
+import { Login } from '../../model/login';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class LoginComponent {
   public isVisible : boolean = false; 
   public isEqual : boolean = false;
   public user : UserDTO = new UserDTO();
+  userLogin:Login = new Login();
 
   constructor(private fb:FormBuilder, private authService:AuthService) {}
 
@@ -28,6 +30,11 @@ export class LoginComponent {
     role: ['EMPLOYEE',Validators.required],
     password: ['',Validators.required],
     passwordConfirm : ['',Validators.required]
+  })
+
+  loginForm = this.fb.group({
+    username : ['',Validators.required],
+    password: ['',Validators.required]
   })
 
   public toggleLogin():void{
@@ -70,7 +77,43 @@ export class LoginComponent {
           });
         }
       })
+    }else{
+      Swal.fire({
+        icon: 'error',
+        title: 'Error inesperado',
+        text: 'Por favor contacte con el administrador',
+        confirmButtonColor: '#8a2be2', 
+      });
     }
   }
+
+  authenticate():void{
+    if(this.loginForm.valid){
+      this.userLogin.username = this.loginForm.get('username')?.value??'';
+      this.userLogin.password = this.loginForm.get('password')?.value??'';
+      console.log(this.userLogin)
+      this.authService.authenticate(this.userLogin).subscribe((response:any)=>{
+          console.log(response.jwt);
+      },responseErr=>{
+        if(responseErr.status === 403){
+          Swal.fire({
+            icon: 'error',
+            title: 'Credenciales incorrectas',
+            text: 'Nombre de usuario o contraseñas incorrectas',
+            confirmButtonColor: '#8a2be2', 
+          });
+        }
+      })
+    }else{
+      Swal.fire({
+        icon: 'error',
+        title: 'Error inesperado',
+        text: 'Por favor contacte con el administrador',
+        confirmButtonColor: '#8a2be2', 
+      });
+    }
+  }
+
+
 
 }
