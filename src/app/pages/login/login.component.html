@@ -1,6 +1,6 @@
 <div class="h-screen bg-gradient-to-br from-indigo-500 to-indigo-950 absolute top-0 left-0 w-full"></div>
 <div class="w-full h-screen grid grid-cols-2">
-    <div class="z-10 mx-auto w-3/4 mt-36">
+    <div class="z-10 mx-auto w-3/4 mt-20">
         <h1 class="text-5xl text-white text-center">Talent<span class="text-indigo-300 font-medium">H</span>ub</h1>
         <div class="p-4 rounded-md bg-white text-center border-2 border-violet-900 mt-10">
             <h1 class="text-2xl text-indigo-900 mt-2">Autenticarse</h1>
@@ -18,39 +18,81 @@
                 <button *ngIf="login" type="submit" class="bg-indigo-500 text-white mt-8 p-2 rounded-md hover:bg-indigo-600 
     w-full transition-colors duration-300">Iniciar Sesión</button>
             </form>
-            <form class="text-start p-2 animate-fadeIn" *ngIf="!login">
+            <form class="text-start p-2 animate-fadeIn" *ngIf="!login" [formGroup]="registerForm"
+                (ngSubmit)="registerUser()">
                 <div class="mt-4 text-left">
                     <label for="username" class="block text-sm font-medium text-gray-600">Nombre de Usuario</label>
                     <input type="text" class="rounded-md border border-color-gray p-2 w-full transition duration-500
-         focus:border-violet-800 focus:outline-none mt-1" placeholder="Ingrese el nombre de usuario">
+         focus:border-violet-800 focus:outline-none mt-1" placeholder="Ingrese el nombre de usuario"
+                        [ngClass]="{'border-red': registerForm.get('username')?.invalid && registerForm.get('username')?.touched }"
+                        formControlName="username" minlength="4" maxlength="15">
+                    <div *ngIf="registerForm.get('username')?.hasError('required') &&
+                    registerForm.get('username')?.touched" class="text-sm text-red-500 mt-2">
+                        El username es obligatorio.
+                    </div>
+                    <div *ngIf="registerForm.get('username')?.hasError('minlength') 
+                    && registerForm.get('username')?.touched" class="text-sm text-red-500 mt-2">
+                        El username debe tener 4 o mas caracteres.
+                    </div>
                 </div>
                 <div class="mt-4 text-left">
                     <label for="username" class="block text-sm font-medium text-gray-600">Email</label>
                     <input type="text" class="rounded-md border border-color-gray p-2 w-full transition duration-500
-         focus:border-violet-800 focus:outline-none mt-1" placeholder="Ingrese su correo">
+         focus:border-violet-800 focus:outline-none mt-1" placeholder="Ingrese su correo" formControlName="email" email=""
+         [ngClass]="{'border-red': registerForm.get('email')?.invalid && registerForm.get('email')?.touched }">
+                    <div *ngIf="registerForm.get('email')?.hasError('required') &&
+         registerForm.get('email')?.touched" class="text-sm text-red-500 mt-2">
+                        El email es obligatorio
+                    </div>
+                    <div *ngIf="registerForm.get('email')?.hasError('email') &&
+         registerForm.get('email')?.touched" class="text-sm text-red-500 mt-2">
+                        El email es incorrecto
+                    </div>
                 </div>
                 <div class="mt-4 text-left">
                     <label for="password" class="block text-sm font-medium text-gray-600">Contraseña</label>
                     <input type="password" class="rounded-md mt-1 w-full border border-color-gray p-2 transition duration-500
-         focus:border-violet-800 focus:outline-none" placeholder="Ingrese la contraseña">
+         focus:border-violet-800 focus:outline-none" placeholder="Ingrese la contraseña" formControlName="password" minlength="6"
+         [ngClass]="{'border-red': registerForm.get('password')?.invalid && registerForm.get('password')?.touched }">
+                </div>
+                <div *ngIf="registerForm.get('password')?.hasError('required') &&
+                registerForm.get('password')?.touched" class="text-sm text-red-500 mt-2">
+                    La contraseña es obligatoria
+                </div>
+                <div *ngIf="registerForm.get('password')?.hasError('minlength') 
+                && registerForm.get('password')?.touched" class="text-sm text-red-500 mt-2">
+                    El contraseña debe tener 6 o mas caracteres
                 </div>
                 <div class="mt-4 text-left">
                     <label for="password" class="block text-sm font-medium text-gray-600">Confirmacion de la
                         contraseña</label>
                     <input type="password" class="rounded-md mt-1 w-full border border-color-gray p-2 transition duration-500
-         focus:border-violet-800 focus:outline-none" placeholder="Confirme la contraseña">
+         focus:border-violet-800 focus:outline-none" placeholder="Confirme la contraseña"
+                        formControlName="passwordConfirm" (input)="comparePasswords()"
+                        [ngClass]="{'border-red': registerForm.get('passwordConfirm')?.invalid && registerForm.get('passwordConfirm')?.touched }"
+                        [ngClass]="{'border-red':  !isEqual && registerForm.get('passwordConfirm')?.touched }">
+                        
+                        <div *ngIf="
+                        registerForm.get('passwordConfirm')?.touched && registerForm.get('passwordConfirm')?.hasError('required')"
+                         class="text-sm text-red-500 mt-2">
+                            Tenes que confirmar la contraseña
+                        </div>
+                        <div *ngIf="registerForm.get('passwordConfirm')?.touched && !isEqual" class="text-sm text-red-500 mt-2">
+                            Las contraseñas no coinciden
+                        </div>
                 </div>
                 <div class="mt-4 text-left">
                     <label for="role" class="block text-sm font-medium text-gray-600">¿Que buscas?</label>
                     <select id="role" name="role" class="form-select rounded-md mt-1 w-full 
-        border border-color-gray p-2 transition duration-500
-        focus:border-violet-800 focus:outline-none ">
-                        <option value="empleado">Ser contratado</option>
-                        <option value="empleador">Contratar</option>
+        border border-color-gray p-2 transition duration-500 
+        focus:border-violet-800 focus:outline-none " formControlName="role">
+                        <option value="EMPLOYEE">Ser contratado</option>
+                        <option value="EMPLOYEER">Contratar</option>
                     </select>
                 </div>
                 <button type="submit" class="bg-indigo-500 text-white mt-8 p-2 rounded-md hover:bg-indigo-600 
-    w-full transition-colors duration-300">Registrarse</button>
+    w-full transition-colors duration-300" [disabled]="registerForm.invalid"
+    [ngClass]="{'disabled': registerForm.invalid || !isEqual}">Registrarse</button>
             </form>
             <p class="mt-4" *ngIf="login">No tiene una cuenta? <span class="ms-2 cursor-pointer text-indigo-500
         transition-colors duration-300 hover:text-indigo-800" (click)="toggleLogin()">Registrarse</span></p>
@@ -60,7 +102,8 @@
     </div>
     <div>
         <div class="h-full">
-            <img src="../../../assets/img/banner.jpg" class="w-max h-screen object-center object-cover grayscale" alt="">
+            <img src="../../../assets/img/banner.jpg" class="w-max h-screen object-center object-cover grayscale"
+                alt="">
         </div>
     </div>
 </div>

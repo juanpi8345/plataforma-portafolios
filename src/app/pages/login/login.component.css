@@ -1,3 +1,12 @@
 .centrar{
     transform: translate(-50%,-50%);
 }
+
+.border-red{
+    border-color: red;
+}
+
+.disabled{
+    cursor: not-allowed;
+    opacity: 0.5;
+}
