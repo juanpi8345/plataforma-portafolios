@@ -6,6 +6,9 @@ import { AuthService } from '../../services/auth.service';
 import { UserDTO } from '../../model/user-dto';
 import Swal from 'sweetalert2';
 import { Login } from '../../model/login';
+import { Router, RouterLink } from '@angular/router';
+import { HttpResponse } from '@angular/common/http';
+import { routes } from '../../app.routes';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +25,8 @@ export class LoginComponent {
   public user : UserDTO = new UserDTO();
   userLogin:Login = new Login();
 
-  constructor(private fb:FormBuilder, private authService:AuthService) {}
+  constructor(private fb:FormBuilder, private authService:AuthService,
+    private router:Router) {}
 
   registerForm = this.fb.group({
     username : ['',Validators.required],
@@ -91,9 +95,11 @@ export class LoginComponent {
     if(this.loginForm.valid){
       this.userLogin.username = this.loginForm.get('username')?.value??'';
       this.userLogin.password = this.loginForm.get('password')?.value??'';
-      console.log(this.userLogin)
       this.authService.authenticate(this.userLogin).subscribe((response:any)=>{
-          console.log(response.jwt);
+          this.authService.login(response.jwt);
+          this.authService.get().subscribe((response:HttpResponse<UserDTO>)=>{
+            this.authService.setUser(response);
+          })
       },responseErr=>{
         if(responseErr.status === 403){
           Swal.fire({
@@ -103,7 +109,9 @@ export class LoginComponent {
             confirmButtonColor: '#8a2be2', 
           });
         }
+        return;
       })
+      this.router.navigate(['/employee'])
     }else{
       Swal.fire({
         icon: 'error',
