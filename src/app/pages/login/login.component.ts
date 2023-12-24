@@ -100,6 +100,7 @@ export class LoginComponent {
           this.authService.get().subscribe((response:HttpResponse<UserDTO>)=>{
             this.authService.setUser(response);
           })
+          this.router.navigate(['/employee/profile'])
       },responseErr=>{
         if(responseErr.status === 403){
           Swal.fire({
@@ -109,9 +110,7 @@ export class LoginComponent {
             confirmButtonColor: '#8a2be2', 
           });
         }
-        return;
       })
-      this.router.navigate(['/employee'])
     }else{
       Swal.fire({
         icon: 'error',
