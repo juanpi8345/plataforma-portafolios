@@ -1,5 +1,96 @@
-<div class="container animate-fadeIn mt-16">
-    <div class="p-4 rounded-md bg-white text-center border-2 border-violet-900  me-16">
-        lgfksslg
+<div class="container animate-fadeIn mt-6">
+    <div class="pb-1 rounded-md bg-white text-center me-16 h-85vh ">
+        <div class="p-0 h-40 bg-indigo-400 relative">
+            <div class="h-28 w-28  absolute left-5 top-1/2 centrar-y">
+                @if(profile.image === null){
+                <img src="../../../../assets/img/anonimo.png" class="h-max object-cover  rounded-full" alt="">
+                }@else {
+                <img src="../../../../assets/img/anonimo.png" class="h-max object-cover  rounded-full" alt="">
+                }
+
+            </div>
+        </div>
+        <div class="ps-4 pe-4 mt-4">
+            <div class="flex justify-between">
+                <h1 class="text-left text-2xl">{{profile.name}}</h1>
+                <h4 class="text-left mt-2 text-lg italic">
+                    @if(profile.occupations === null){
+                    Tu ocupacion aqui
+                    }@else {
+                    {{profile.occupations}}
+                    }
+                </h4>
+            </div>
+            <h2 class="mt-4 text-center text-xl text-indigo-500 text-center">
+                Sobre mi
+            </h2>
+            <p class="italic text-lg mt-3">
+                @if(profile.description === null){
+                Escribe una descripcion sobre ti, sobre lo que haces, describa sus habilidades,
+                experiencias laborales, y todo lo que crea relevante para llamar la atencion de un recluter.
+                }@else {
+                {{profile.description}}
+                }
+            </p>
+            <h2 class="mt-6 text-center text-xl text-indigo-500 text-center">
+                Habilidades
+            </h2>
+            @if(profile.skills.length === 0){
+            <div class="flex justify-around mt-4">
+                <div class="p-4 rounded-md bg-white text-center shadow-md">
+                    <img src="../../../../assets/img/html-5.png" class="h-24 w-24" alt="">
+                    <h1 class="mt-1 text-lg italic text-indigo-300">HTML 5</h1>
+                </div>
+                <div class="p-4 rounded-md bg-white text-center shadow-md">
+                    <img src="../../../../assets/img/css-3.png" class="h-24 w-24" alt="">
+                    <h1 class="mt-1 text-lg italic text-indigo-300">CSS 3</h1>
+                </div>
+                <div class="p-4 rounded-md bg-white text-center shadow-md">
+                    <img src="../../../../assets/img/angular.png" class="h-24 w-24" alt="">
+                    <h1 class="mt-1 text-lg italic text-indigo-300">Angular</h1>
+                </div>
+            </div>
+            <p class="mt-6 italic">Estas habilidades son de muestra, se eliminaran cuando agregue una habilidad a su
+                perfil</p>
+            }@else{
+
+            }
+            <h2 class="mt-6 text-center text-xl text-indigo-500 text-center">
+                Proyectos
+            </h2>
+            @if(profile.projects.length === 0){
+            <div class="flex justify-around mt-4">
+                <div class="rounded-md bg-white text-center shadow-md">
+                    <img src="../../../../assets/img/ecommerce.jpg" class="w-56" alt="">
+                    <div class="p-2">
+                        <h1 class="mt-1 text-lg italic text-indigo-300 text-center">E-commerce</h1>
+                        <button class="bg-indigo-500 text-white mt-4 p-2 rounded-md hover:bg-indigo-600 
+                        w-full transition-colors duration-300">Ver mas</button>
+                    </div>
+                </div>
+                <div class="rounded-md bg-white text-center shadow-md">
+                    <img src="../../../../assets/img/examenes.png" class="w-56" alt="">
+                    <div class="p-2">
+                        <h1 class="mt-1 text-lg italic text-indigo-300 text-center">Plataforma de examenes</h1>
+                        <button class="bg-indigo-500 text-white mt-4 p-2 rounded-md hover:bg-indigo-600 
+                            w-full transition-colors duration-300">Ver mas</button>
+                    </div>
+                </div>
+                <div class="rounded-md bg-white text-center shadow-md">
+                    <img src="../../../../assets/img/blog.png" class="w-56" alt="">
+                    <div class="p-2">
+                        <h1 class="mt-1 text-lg italic text-indigo-300 text-center">Blog</h1>
+                        <button class="bg-indigo-500 text-white mt-4 p-2 rounded-md hover:bg-indigo-600 
+                            w-full transition-colors duration-300">Ver mas</button>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-6 italic">Estas proyectos son de muestra, se eliminaran cuando agregue un proyecto a su perfil
+            </p>
+            }@else{
+
+            }
+        </div>
+
     </div>
 </div>

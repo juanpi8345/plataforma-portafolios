@@ -7,7 +7,6 @@ export const loggedGuard: CanActivateFn = (route, state) => {
     inject(Router).navigate(['employee/profile'])
     return false
   }else{
-    
     return true;
   }
 };
