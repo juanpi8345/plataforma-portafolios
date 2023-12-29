@@ -12,19 +12,31 @@
         </div>
         <div class="ps-4 pe-4 mt-4">
             <div class="flex justify-between">
-                <h1 class="text-left text-2xl">{{profile.name}}</h1>
-                <h4 class="text-left mt-2 text-lg italic">
-                    @if(profile.occupations === null){
-                    Tu ocupacion aqui
-                    }@else {
-                    {{profile.occupations}}
-                    }
-                </h4>
+                <div class="flex">
+                    <h1 class="text-left text-2xl me-2">{{profile.name}}</h1>
+                    <div class="w-8 h-8 border rounded-full flex justify-center items-center cursor-pointer"
+                        (click)="editName()">
+                        <img src="../../../../assets/img/lapiz.png" class="w-4 h-4" alt="">
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <h4 class="text-left mt-2 text-lg italic">
+                        @if(profile.occupations === null){
+                        Tu ocupacion aqui
+                        }@else {
+                        {{profile.occupations}}
+                        }
+                    </h4>
+                    <div class="w-8 h-8 ms-3 border rounded-full flex justify-center items-center cursor-pointer"
+                        (click)="editOccupation()">
+                        <img src="../../../../assets/img/lapiz.png" class="w-4 h-4" alt="">
+                    </div>
+                </div>
             </div>
-            <h2 class="mt-4 text-center text-xl text-indigo-500 text-center">
+            <h2 class="mt-6 text-center text-xl text-indigo-500 text-center">
                 Sobre mi
             </h2>
-            <p class="italic text-lg mt-3">
+            <p class="bold text-md mt-3 leading-7">
                 @if(profile.description === null){
                 Escribe una descripcion sobre ti, sobre lo que haces, describa sus habilidades,
                 experiencias laborales, y todo lo que crea relevante para llamar la atencion de un recluter.
@@ -32,7 +44,14 @@
                 {{profile.description}}
                 }
             </p>
-            <h2 class="mt-6 text-center text-xl text-indigo-500 text-center">
+            <div class="flex justify-end">
+                <div class="w-8 h-8 border rounded-full flex justify-center items-center cursor-pointer"
+                (click)="editDescription()">
+                <img src="../../../../assets/img/lapiz.png" class="w-4 h-4" alt="">
+            </div>
+            </div>
+          
+            <h2 class=" text-center text-xl text-indigo-500 text-center">
                 Habilidades
             </h2>
             @if(profile.skills.length === 0){
@@ -55,7 +74,7 @@
             }@else{
 
             }
-            <h2 class="mt-6 text-center text-xl text-indigo-500 text-center">
+            <h2 class="mt-8 text-center text-xl text-indigo-500 text-center">
                 Proyectos
             </h2>
             @if(profile.projects.length === 0){
