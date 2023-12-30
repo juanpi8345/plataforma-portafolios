@@ -5,7 +5,7 @@ export class Profile {
    name : string = '';
    occupations : string = '';
    description : string = '';
-   image : string = '';
+   image : File;
    projects : Project[] = [];
    skills : Skill[] = [];
 }

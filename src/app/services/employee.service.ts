@@ -22,4 +22,11 @@ export class EmployeeService {
   public editDescription(description:string):Observable<any>{
     return this.http.put(this.apiUrl + "edit/description?description="+description,null);
   }
+
+  public uploadImage(imageFile: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('imageFile', imageFile);
+
+    return this.http.post(this.apiUrl + "add/image", formData);
+  }
 }
