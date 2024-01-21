@@ -2,6 +2,7 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+/* sometimes aos animations crash */
 
 .animate-fadeIn {
     animation: fadeIn .7s ease-out;
@@ -18,3 +19,4 @@
         transform: translateY(0);
     }
 }
+

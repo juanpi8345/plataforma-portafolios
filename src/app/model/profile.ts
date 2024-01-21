@@ -8,4 +8,5 @@ export class Profile {
    image : File;
    projects : Project[] = [];
    skills : Skill[] = [];
+
 }
