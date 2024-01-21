@@ -1,7 +1,11 @@
 <div class="h-screen bg-gradient-to-br from-indigo-500 to-indigo-950 absolute top-0 left-0 w-full"></div>
 <div class="w-full h-screen grid grid-cols-2">
     <div class="z-10 mx-auto w-3/4 mt-20">
-        <h1 class="text-5xl text-white text-center">Talent<span class="text-indigo-300 font-medium">H</span>ub</h1>
+        <h1 class="text-5xl text-white text-center"
+        data-aos="fade-zoom-in"
+        data-aos-easing="ease-in-back"
+        data-aos-delay="200"
+        data-aos-offset="0">Talent<span class="text-indigo-300 font-medium">H</span>ub</h1>
         <div class="p-4 rounded-md bg-white text-center border-2 border-violet-900 mt-10">
             <h1 class="text-2xl text-indigo-900 mt-2">Autenticarse</h1>
             <form class="text-start p-2 animate-fadeIn" *ngIf="login" [formGroup]="loginForm"
@@ -125,7 +129,7 @@
 <section class="bg-indigo-900 text-white pt-8">
     <div class="container mx-auto w-3/4">
         <h2 class="text-center text-4xl ">Acerca de</h2>
-        <div class="grid grid-cols-2 mt-16">
+        <div class="grid grid-cols-2 mt-16" data-aos="fade-left" data-aos-duration="1200">
             <div class="p-4 border bg-indigo-950 transition-colors duration-300 hover:bg-indigo-900">
                 <img src="../../../assets/img/perfil.svg" class="w-max" alt="">
             </div>
@@ -137,7 +141,7 @@
                 </p>
             </div>
         </div>
-        <div class="grid grid-cols-2 mt-16">
+        <div class="grid grid-cols-2 mt-16" data-aos="fade-right" data-aos-duration="1200">
             <div class="self-center pe-8">
                 <h1 class="text-center text-3xl text-indigo-300">Chat en tiempo real</h1>
                 <p class="text-center mt-4 text-xl italic ">La plataforma posee un chat en tiempo real, donde puede
@@ -149,7 +153,7 @@
                 <img src="../../../assets/img/contacto.svg" class="w-max" alt="">
             </div>
         </div>
-        <div class="grid grid-cols-2 mt-16 pb-16">
+        <div class="grid grid-cols-2 mt-16 pb-16" data-aos="fade-left" data-aos-duration="1200">
             <div class="p-4 border bg-indigo-950 transition-colors duration-300 hover:bg-indigo-900">
                 <img src="../../../assets/img/contratar.svg" class="w-max position-center" alt="">
             </div>
