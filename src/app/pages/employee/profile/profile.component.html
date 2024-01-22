@@ -1,5 +1,5 @@
-<div class="container  mt-6" data-aos="fade-down" data-aos-duration="1500">
-    <div class="pb-1 rounded-md bg-white text-center me-16 h-85vh ">
+<div class="mt-6 mx-auto me-8 ms-8" data-aos="fade-down" data-aos-duration="1500">
+    <div class="pb-1 rounded-md bg-white text-center h-85vh">
         <div class="p-0 h-40 bg-indigo-400 relative">
             <div class="h-28 w-28  absolute left-5 top-1/2 centrar-y">
                 @if(profile.image === null){
@@ -72,7 +72,7 @@
                     perfil</p>
                 }@else{
                 <div class="flex justify-around mt-4 flex-wrap">
-                    <div class="p-4 w-1/4 mb-4 me-2 rounded-md bg-white text-center shadow-md relative"
+                    <div class="p-4 w-1/6 m-6 rounded-md bg-white text-center shadow-md relative"
                         *ngFor="let skill of profile.skills">
                         <img [src]="skill.image" class="h-24 w-24 mx-auto" alt="">
                         <h1 class="mt-1 text-lg italic text-indigo-300">{{skill.title}}</h1>
