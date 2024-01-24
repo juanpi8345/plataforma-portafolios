@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, delay } from 'rxjs';
 import { UserDTO } from '../model/user-dto';
 import { Login } from '../model/login';
+import { User } from '../model/user';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +22,8 @@ export class AuthService {
     return this.http.post<HttpResponse<String>>(this.apiUrl+ "login",login);
   }
 
-  public get():Observable<HttpResponse<UserDTO>>{
-    return this.http.get<HttpResponse<UserDTO>>(this.apiUrl + "get");
+  public get():Observable<User>{
+    return this.http.get<User>(this.apiUrl + "get").pipe(delay(2000));
   }
 
   //localstorage
@@ -31,7 +32,7 @@ export class AuthService {
     localStorage.setItem("token",token);
   }
 
-  public setUser(user:HttpResponse<UserDTO>){
+  public setUser(user:User){
     localStorage.setItem("user",JSON.stringify(user));
   }
 

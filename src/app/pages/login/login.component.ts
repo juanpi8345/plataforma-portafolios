@@ -9,6 +9,7 @@ import { Login } from '../../model/login';
 import { Router, RouterLink } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { routes } from '../../app.routes';
+import { User } from '../../model/user';
 
 @Component({
   selector: 'app-login',
@@ -97,7 +98,7 @@ export class LoginComponent {
       this.userLogin.password = this.loginForm.get('password')?.value??'';
       this.authService.authenticate(this.userLogin).subscribe((response:any)=>{
           this.authService.login(response.jwt);
-          this.authService.get().subscribe((response:HttpResponse<UserDTO>)=>{
+          this.authService.get().subscribe((response:User)=>{
             this.authService.setUser(response);
           })
           this.router.navigate(['/employee/profile'])

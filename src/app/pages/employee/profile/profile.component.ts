@@ -7,9 +7,10 @@ import { CommonModule } from '@angular/common';
 import { EmployeeService } from '../../../services/employee.service';
 import { Skill } from '../../../model/skill';
 import { SkillService } from '../../../services/skill.service';
-import { FormBuilder, FormControl, FormControlName, FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-
+import { FormBuilder, FormControl, FormControlName, FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { Observable } from 'rxjs';
+import { UserDTO } from '../../../model/user-dto';
+import { User } from '../../../model/user';
 
 @Component({
   selector: 'app-profile',
@@ -22,56 +23,37 @@ export class ProfileComponent {
 
   constructor(private authService: AuthService, private router: Router
     , private employeeService: EmployeeService, private skillService: SkillService
-    , private fb: FormBuilder) { }
+    , private fb: FormBuilder) {
+    this.user$ = this.authService.get();
+    this.skills$ = this.skillService.getSkills();
+  }
 
-  profile: Profile = new Profile();
-  skills: Skill[];
+  user$!: Observable<User>;
+  skills$!: Observable<Skill[]>;
   addSkill: boolean = false;
+
+  profileImageUrl: string | undefined;
+  selectedFile: File;
+  formData: FormData = new FormData();
 
   skill = new FormControl('Angular');
 
-  ngOnInit(): void {
-    this.authService.get().subscribe((response: any) => {
-      this.profile = response.profile;
-    }, responseErr => {
-      if (responseErr.status === 403) {
-        this.authService.logout();
-        Swal.fire({
-          icon: 'error',
-          title: 'Sesion expirada',
-          text: 'Por favor inicia sesion nuevamente',
-          confirmButtonColor: '#8a2be2',
-        });
-        this.router.navigate(['login']);
-      }
-    })
-    this.skillService.getSkills().subscribe((skills: Skill[]) => {
-      this.skills = skills;
-    })
-
-  }
-
-
-  public editName(): void {
+  public editName(user:User): void {
     Swal.fire({
       title: 'Editar nombre',
-      html: '<input type="text" (input)="getSkillsContaining()" [(ngModel)]="inputValue" id="modal-input" placeholder="Tu nuevo nombre aqui" class="text-center rounded-md border border-color-gray p-2 w-full transition duration-500 focus:border-violet-800 focus:outline-none">',
+      html: '<input type="text" (input)="getSkillsContaining()" id="modal-input" placeholder="Tu nuevo nombre aqui" class="text-center rounded-md border border-color-gray p-2 w-full transition duration-500 focus:border-violet-800 focus:outline-none">',
       showCancelButton: true,
       confirmButtonText: 'Guardar',
       cancelButtonText: 'Cancelar',
       preConfirm: () => {
         const inputValue = (<HTMLInputElement>document.getElementById('modal-input')).value;
-
-        this.employeeService.editName(inputValue).subscribe(() => {
-          this.profile.name = inputValue;
-        }, err => {
-          Swal.fire("Error al actualizar nombre", "Por favor revisa que no contenga caracteres especiales", "error");
-        });
+        this.employeeService.editName(inputValue).subscribe();
+        user.profile.name = inputValue;
       }
     });
   }
 
-  public editOccupation(): void {
+  public editOccupation(user: User): void {
     Swal.fire({
       title: 'Editar ocupacion',
       html: '<input type="text" id="modal-input" placeholder="Tu nueva ocupacion aqui" class="text-center rounded-md border border-color-gray p-2 w-full transition duration-500 focus:border-violet-800 focus:outline-none">',
@@ -80,17 +62,13 @@ export class ProfileComponent {
       cancelButtonText: 'Cancelar',
       preConfirm: () => {
         const inputValue = (<HTMLInputElement>document.getElementById('modal-input')).value;
-        this.employeeService.editOccupation(inputValue).subscribe(() => {
-          this.profile.occupations = inputValue;
-        }, err => {
-          Swal.fire("Error al actualizar ocupacion", "Por favor revisa que no contenga caracteres especiales", "error");
-        });
+        this.employeeService.editOccupation(inputValue).subscribe();
+        user.profile.occupations = inputValue;
       }
     });
   }
-
-
-  public editDescription(): void {
+  
+  public editDescription(user: User): void {
     Swal.fire({
       title: 'Editar descripcion',
       html: '<textarea type="text" id="modal-input" placeholder="Tu nueva descripcion aqui" rows="4" cols="50" class="text-center rounded-md border border-color-gray p-2 w-full transition duration-500 focus:border-violet-800 focus:outline-none">',
@@ -99,11 +77,8 @@ export class ProfileComponent {
       cancelButtonText: 'Cancelar',
       preConfirm: () => {
         const inputValue = (<HTMLTextAreaElement>document.getElementById('modal-input')).value;
-        this.employeeService.editDescription(inputValue).subscribe(() => {
-          this.profile.description = inputValue;
-        }, err => {
-          Swal.fire("Error al actualizar descripcion", "Por favor revisa que no contenga caracteres especiales y no sea demasiado extensa", "error");
-        });
+        this.employeeService.editDescription(inputValue).subscribe();
+        user.profile.description = inputValue;
       }
     });
   }
@@ -116,10 +91,9 @@ export class ProfileComponent {
     this.addSkill = false;
   }
 
-  public saveSkill(event: Event): void {
+  public saveSkill(event: Event, user: User): void {
     event.preventDefault();
     if (this.skill.valid) {
-
       Swal.fire({
         title: 'Agregar skill',
         html: '¿Estás seguro de que deseas agregar la skill?',
@@ -131,17 +105,16 @@ export class ProfileComponent {
       }).then((result) => {
         if (result.isConfirmed) {
           this.skillService.addSkill(this.skill.value).subscribe((skill: Skill) => {
-            if (!this.skillExists(skill.title))
-              this.profile.skills.push(skill);
+            if (!this.skillExists(skill.title, user))
+              user.profile.skills.push(skill);
             this.closeFormSkill();
           })
         }
       });
-
     }
   }
 
-  public deleteSkill(skillId: number) {
+  public deleteSkill(skillId: number, user: User) {
     Swal.fire({
       title: 'Eliminar skill',
       html: '¿Estás seguro de que deseas eliminar la skill?',
@@ -152,32 +125,20 @@ export class ProfileComponent {
       confirmButtonColor: '#8a2be2',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.profile.skills = this.profile.skills.filter(skill => skill.skillId !== skillId)
+        user.profile.skills = user.profile.skills.filter(skill => skill.skillId !== skillId)
         this.skillService.deleteSkill(skillId).subscribe();
-        
       };
     });
   }
 
-
-
   // Aux
-  public skillExists(title: string) {
-    for (let skill of this.profile.skills) {
+  public skillExists(title: string, user: User) {
+    for (let skill of user.profile.skills) {
       if (skill.title === title)
         return true;
     }
     return false;
   }
-
-  // public getSkillById(id:number):Skill{
-  //   for (let skill of this.profile.skills) {
-  //     if (skill.skillId === id)
-  //       return skill;
-  //   }
-  //   return null;
-  // }
-
 }
 
 
