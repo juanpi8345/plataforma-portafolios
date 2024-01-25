@@ -101,7 +101,10 @@ export class LoginComponent {
           this.authService.get().subscribe((response:User)=>{
             this.authService.setUser(response);
           })
-          this.router.navigate(['/employee/profile'])
+          if(this.authService.getUserRol() === 'EMPLOYEE')
+            this.router.navigate(['/employee/profile'])
+          else
+            this.router.navigate(['/employeer/profile'])
       },responseErr=>{
         if(responseErr.status === 403){
           Swal.fire({

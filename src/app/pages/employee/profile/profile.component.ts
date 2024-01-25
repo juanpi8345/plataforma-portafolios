@@ -8,7 +8,7 @@ import { EmployeeService } from '../../../services/employee.service';
 import { Skill } from '../../../model/skill';
 import { SkillService } from '../../../services/skill.service';
 import { FormBuilder, FormControl, FormControlName, FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { Observable } from 'rxjs';
+import { Observable, Subscription, catchError } from 'rxjs';
 import { UserDTO } from '../../../model/user-dto';
 import { User } from '../../../model/user';
 
@@ -24,17 +24,23 @@ export class ProfileComponent {
   constructor(private authService: AuthService, private router: Router
     , private employeeService: EmployeeService, private skillService: SkillService
     , private fb: FormBuilder) {
-    this.user$ = this.authService.get();
+    this.user$ = this.authService.get().pipe(catchError(error=>{
+      this.authService.logout();
+      this.router.navigate(['/login']);
+      throw new Error;
+    }));
     this.skills$ = this.skillService.getSkills();
   }
 
   user$!: Observable<User>;
   skills$!: Observable<Skill[]>;
+
   addSkill: boolean = false;
 
-  profileImageUrl: string | undefined;
-  selectedFile: File;
-  formData: FormData = new FormData();
+  editOccupationSubscription:Subscription;
+  editDescriptionSubscription:Subscription;
+  addSkillSubscription:Subscription;
+  deleteSkillSubscription:Subscription;
 
   skill = new FormControl('Angular');
 
@@ -62,7 +68,7 @@ export class ProfileComponent {
       cancelButtonText: 'Cancelar',
       preConfirm: () => {
         const inputValue = (<HTMLInputElement>document.getElementById('modal-input')).value;
-        this.employeeService.editOccupation(inputValue).subscribe();
+        this.editOccupationSubscription = this.employeeService.editOccupation(inputValue).subscribe();
         user.profile.occupations = inputValue;
       }
     });
@@ -77,7 +83,7 @@ export class ProfileComponent {
       cancelButtonText: 'Cancelar',
       preConfirm: () => {
         const inputValue = (<HTMLTextAreaElement>document.getElementById('modal-input')).value;
-        this.employeeService.editDescription(inputValue).subscribe();
+        this.editDescriptionSubscription = this.employeeService.editDescription(inputValue).subscribe();
         user.profile.description = inputValue;
       }
     });
@@ -104,7 +110,7 @@ export class ProfileComponent {
         confirmButtonColor: '#8a2be2',
       }).then((result) => {
         if (result.isConfirmed) {
-          this.skillService.addSkill(this.skill.value).subscribe((skill: Skill) => {
+         this.addSkillSubscription =  this.skillService.addSkill(this.skill.value).subscribe((skill: Skill) => {
             if (!this.skillExists(skill.title, user))
               user.profile.skills.push(skill);
             this.closeFormSkill();
@@ -126,7 +132,7 @@ export class ProfileComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         user.profile.skills = user.profile.skills.filter(skill => skill.skillId !== skillId)
-        this.skillService.deleteSkill(skillId).subscribe();
+        this.deleteSkillSubscription = this.skillService.deleteSkill(skillId).subscribe();
       };
     });
   }
@@ -138,6 +144,13 @@ export class ProfileComponent {
         return true;
     }
     return false;
+  }
+
+  ngOnDestroy(){
+    this.addSkillSubscription.unsubscribe();
+    this.editOccupationSubscription.unsubscribe();
+    this.editDescriptionSubscription.unsubscribe();
+    this.deleteSkillSubscription.unsubscribe();
   }
 }
 

@@ -3,11 +3,11 @@
         <div *ngIf="user$ | async as user; else loader" data-aos="fade-down" data-aos-duration="1200">
             <div class="p-0 h-40 bg-indigo-400 relative">
                 <div class="h-28 w-28  absolute left-5 top-1/2 centrar-y">
-                    @if(profileImageUrl === undefined){
+                    @if(true){
                     <img src="../../../../assets/img/anonimo.png" class="h-max object-cover  rounded-full" alt="">
-                    }@else {
-                    <img [src]="profileImageUrl" class="h-max object-cover rounded-full" alt="">
-                    }
+                    }<!-- @else {
+                    <img [src]="" class="h-max object-cover rounded-full" alt="">
+                    } -->
                 </div>
             </div>
             <div class="ps-4 pe-4 mt-4">
