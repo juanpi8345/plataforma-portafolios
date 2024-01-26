@@ -1,12 +1,12 @@
 <div class="mt-6 mx-auto me-20 ms-20" data-aos="fade-down" data-aos-duration="1500">
-    <div class="pb-1 rounded-md bg-white text-center h-85vh relative">
+    <div class="pb-12 rounded-md bg-white text-center h-85vh relative">
         <div *ngIf="user$ | async as user; else loader" data-aos="fade-down" data-aos-duration="1200">
             <div class="p-0 h-40 bg-indigo-400 relative">
                 <div class="h-28 w-28  absolute left-5 top-1/2 centrar-y">
                     @if(true){
                     <img src="../../../../assets/img/anonimo.png" class="h-max object-cover  rounded-full" alt="">
                     }<!-- @else {
-                    <img [src]="" class="h-max object-cover rounded-full" alt="">
+                    <img [src]="" class="h-max object-cover rounded-full" alt=""> will be soon...
                     } -->
                 </div>
             </div>
@@ -21,25 +21,51 @@
                     </div>
                     <div class="flex items-center">
                         <h4 class="text-left mt-2 text-lg italic">
+                            @if(role === "EMPLOYEE"){
                             @if(user.profile.occupations === null){
                             Tu ocupacion aqui
                             }@else {
                             {{user.profile.occupations}}
                             }
+                            }@else {
+                            IT-Recluter
+                            }
                         </h4>
+                        @if(role === "EMPLOYEE"){
                         <div class="w-8 h-8 ms-3 border rounded-full flex justify-center items-center cursor-pointer"
                             (click)="editOccupation(user)">
                             <img src="../../../../assets/img/lapiz.png" class="w-4 h-4" alt="">
                         </div>
+                        }
                     </div>
                 </div>
+                @if(role === "EMPLOYEER"){
+                <div class="flex items-center">
+                    @if(user.profile.occupations === null){
+                    <h2 class="text-left text-xl mt-2">Busca: <span class="italic text-lg">Desarrollador
+                            full-stack</span></h2>
+                    }@else {
+                    <h2 class="text-left text-xl mt-2">Busca: {{user.profile.occupations}}</h2>
+                    }
+                    <div class="w-8 h-8 ms-3 border rounded-full flex justify-center items-center cursor-pointer"
+                        (click)="editOccupation(user)">
+                        <img src="../../../../assets/img/lapiz.png" class="w-4 h-4" alt="">
+                    </div>
+                </div>
+                }
                 <h2 class="mt-6 text-center text-xl text-indigo-500 text-center">
                     Sobre mi
                 </h2>
-                <p class="bold text-md mt-3 leading-7">
+                <p class="bold text-md mt-3 ps-4 pe-4 leading-7">
                     @if(user.profile.description === null){
+                    @if(role === "EMPLOYEE"){
                     Escribe una descripcion sobre ti, sobre lo que haces, describa sus habilidades,
                     experiencias laborales, y todo lo que crea relevante para llamar la atencion de un recluter.
+                    }@else {
+                    Escribe una descripcion sobre ti, tu rol en la empresa, las habilidades que busca, detalles de una
+                    posible
+                    contratacion, y todo lo que crea relevante para llamar la atencion de un desarrollador.
+                    }
                     }@else {
                     {{user.profile.description}}
                     }
@@ -52,7 +78,11 @@
                 </div>
                 <div class="skills relative">
                     <h2 class=" text-center text-xl text-indigo-500 text-center">
+                        @if(role === "EMPLOYEE"){
                         Habilidades
+                        }@else {
+                        Habilidades que busco
+                        }
                     </h2>
                     @if(user.profile.skills.length === 0){
                     <div class="flex justify-around mt-4">
@@ -95,7 +125,7 @@
                             }
                         </div>
                     </div>
-                    <div class="mt-6 mb-16 animate-fadeIn" *ngIf="addSkill">
+                    <div class="mt-12 mb-16 animate-fadeIn" *ngIf="addSkill">
                         <form *ngIf="skills$ | async as skills">
                             <div class="text-center">
                                 <h1>Nueva habilidad</h1>
@@ -111,6 +141,7 @@
                     </div>
 
                 </div>
+                @if(role === "EMPLOYEE"){
                 <h2 class="mt-8 text-center text-xl text-indigo-500 text-center">
                     Proyectos
                 </h2>
@@ -121,7 +152,7 @@
                         <div class="p-2">
                             <h1 class="mt-1 text-lg italic text-indigo-300 text-center">E-commerce</h1>
                             <button class="bg-indigo-500 text-white mt-4 p-2 rounded-md hover:bg-indigo-600 
-                        w-full transition-colors duration-300">Ver mas</button>
+                            w-full transition-colors duration-300">Ver mas</button>
                         </div>
                     </div>
                     <div class="rounded-md bg-white text-center shadow-md">
@@ -129,7 +160,7 @@
                         <div class="p-2">
                             <h1 class="mt-1 text-lg italic text-indigo-300 text-center">Plataforma de examenes</h1>
                             <button class="bg-indigo-500 text-white mt-4 p-2 rounded-md hover:bg-indigo-600 
-                            w-full transition-colors duration-300">Ver mas</button>
+                                w-full transition-colors duration-300">Ver mas</button>
                         </div>
                     </div>
                     <div class="rounded-md bg-white text-center shadow-md">
@@ -137,7 +168,7 @@
                         <div class="p-2">
                             <h1 class="mt-1 text-lg italic text-indigo-300 text-center">Blog</h1>
                             <button class="bg-indigo-500 text-white mt-4 p-2 rounded-md hover:bg-indigo-600 
-                            w-full transition-colors duration-300">Ver mas</button>
+                                w-full transition-colors duration-300">Ver mas</button>
                         </div>
                     </div>
                 </div>
@@ -145,12 +176,14 @@
                     perfil
                 </p>
                 }@else{
-
+                <!-- Will be soon... -->
+                }
                 }
             </div>
         </div>
         <ng-template #loader>
-            <img src="../../../../assets/img/cargando.png" class="h-16 w-16 absolute top-1/2 left-1/2 centrar animate-spin" alt="">
+            <img src="../../../../assets/img/cargando.png"
+                class="h-16 w-16 absolute top-1/2 left-1/2 centrar animate-spin" alt="">
         </ng-template>
     </div>
 </div>

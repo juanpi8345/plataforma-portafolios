@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { Profile } from '../../../model/profile';
+import { Profile } from '../../model/profile';
 import { CommonModule } from '@angular/common';
-import { EmployeeService } from '../../../services/employee.service';
-import { Skill } from '../../../model/skill';
-import { SkillService } from '../../../services/skill.service';
+import { EmployeeService } from '../../services/employee.service';
+import { Skill } from '../../model/skill';
+import { SkillService } from '../../services/skill.service';
 import { FormBuilder, FormControl, FormControlName, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Observable, Subscription, catchError } from 'rxjs';
-import { UserDTO } from '../../../model/user-dto';
-import { User } from '../../../model/user';
+import { UserDTO } from '../../model/user-dto';
+import { User } from '../../model/user';
 
 @Component({
   selector: 'app-profile',
@@ -43,6 +43,13 @@ export class ProfileComponent {
   deleteSkillSubscription:Subscription;
 
   skill = new FormControl('Angular');
+
+  role : string;
+
+  ngOnInit(){
+    this.role = this.authService.getUserRol();
+  }
+
 
   public editName(user:User): void {
     Swal.fire({
@@ -147,10 +154,17 @@ export class ProfileComponent {
   }
 
   ngOnDestroy(){
-    this.addSkillSubscription.unsubscribe();
-    this.editOccupationSubscription.unsubscribe();
-    this.editDescriptionSubscription.unsubscribe();
-    this.deleteSkillSubscription.unsubscribe();
+    if (this.addSkillSubscription) 
+      this.addSkillSubscription.unsubscribe();
+
+    if (this.editOccupationSubscription) 
+      this.editOccupationSubscription.unsubscribe();
+
+    if (this.editDescriptionSubscription) 
+      this.editDescriptionSubscription.unsubscribe();
+
+    if (this.deleteSkillSubscription) 
+      this.deleteSkillSubscription.unsubscribe();
   }
 }
 

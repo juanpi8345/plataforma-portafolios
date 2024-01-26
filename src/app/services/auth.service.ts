@@ -22,7 +22,7 @@ export class AuthService {
     return this.http.post<HttpResponse<String>>(this.apiUrl+ "login",login);
   }
 
-  public get():Observable<User>{
+  public get():Observable<any>{
     return this.http.get<User>(this.apiUrl + "get").pipe(delay(2000));
   }
 

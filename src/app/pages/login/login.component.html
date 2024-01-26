@@ -1,20 +1,16 @@
-<div class="h-screen bg-gradient-to-br from-indigo-500 to-indigo-950 absolute top-0 left-0 w-full"></div>
-<div class="w-full h-screen grid grid-cols-2">
+<div class="w-full min-h-screen max-h-full grid grid-cols-2 bg-gradient-to-br from-indigo-500 to-indigo-950" style="min-height: 100vh;">
     <div class="z-10 mx-auto w-3/4 mt-20">
-        <h1 class="text-5xl text-white text-center"
-        data-aos="fade-zoom-in"
-        data-aos-easing="ease-in-back"
-        data-aos-delay="200"
-        data-aos-offset="0">Talent<span class="text-indigo-300 font-medium">H</span>ub</h1>
+        <h1 class="text-5xl text-white text-center" data-aos="fade-zoom-in" data-aos-easing="ease-in-back"
+            data-aos-delay="200" data-aos-offset="0">Talent<span class="text-indigo-300 font-medium">H</span>ub</h1>
         <div class="p-4 rounded-md bg-white text-center border-2 border-violet-900 mt-10">
             <h1 class="text-2xl text-indigo-900 mt-2">Autenticarse</h1>
             <form class="text-start p-2 animate-fadeIn" *ngIf="login" [formGroup]="loginForm"
-            (ngSubmit)="authenticate()">
+                (ngSubmit)="authenticate()">
                 <div class="mt-4 text-left">
                     <label for="username" class="block text-sm font-medium text-gray-600">Nombre de Usuario</label>
                     <input type="text" class="rounded-md border border-color-gray p-2 w-full transition duration-500
          focus:border-violet-800 focus:outline-none mt-1" placeholder="Ingrese el nombre de usuario"
-         [ngClass]="{'border-red': loginForm.get('username')?.invalid && loginForm.get('username')?.touched }"
+                        [ngClass]="{'border-red': loginForm.get('username')?.invalid && loginForm.get('username')?.touched }"
                         formControlName="username">
                     <div *ngIf="loginForm.get('username')?.hasError('required') &&
          loginForm.get('username')?.touched" class="text-sm text-red-500 mt-2">
@@ -25,14 +21,19 @@
                     <label for="password" class="block text-sm font-medium text-gray-600">Contraseña</label>
                     <input type="password" class="rounded-md mt-1 w-full border border-color-gray p-2 transition duration-500
          focus:border-violet-800 focus:outline-none" placeholder="Ingrese la contraseña" formControlName="password"
-         [ngClass]="{'border-red': loginForm.get('password')?.invalid && loginForm.get('password')?.touched }">
-         <div *ngIf="loginForm.get('password')?.hasError('required') &&
+                        [ngClass]="{'border-red': loginForm.get('password')?.invalid && loginForm.get('password')?.touched }">
+                    <div *ngIf="loginForm.get('password')?.hasError('required') &&
          loginForm.get('password')?.touched" class="text-sm text-red-500 mt-2">
                         Por favor ingresa tu contraseña
                     </div>
                 </div>
-                <button *ngIf="login" [disabled]="loginForm.invalid" type="submit" class="bg-indigo-500 text-white mt-8 p-2 rounded-md hover:bg-indigo-600 
-    w-full transition-colors duration-300" [ngClass]="{'disabled': loginForm.invalid}">Iniciar Sesión</button>
+                <button *ngIf="login"  [disabled]="loginForm.invalid" type="submit" class="bg-indigo-500 relative text-white mt-8 p-2 rounded-md hover:bg-indigo-600 
+    w-full transition-colors duration-300" (click)="this.loading = true" [ngClass]="{'disabled': loginForm.invalid}">
+                    @if(!loading){
+                    Iniciar sesion
+                    }@else {
+                        Cargando...
+                    }</button>
             </form>
             <form class="text-start p-2 animate-fadeIn" *ngIf="!login" [formGroup]="registerForm"
                 (ngSubmit)="registerUser()">
@@ -111,21 +112,29 @@
                 </div>
                 <button type="submit" class="bg-indigo-500 text-white mt-8 p-2 rounded-md hover:bg-indigo-600 
     w-full transition-colors duration-300" [disabled]="registerForm.invalid"
-                    [ngClass]="{'disabled': registerForm.invalid || !isEqual}">Registrarse</button>
+                    [ngClass]="{'disabled': registerForm.invalid || !isEqual}" >Registrarse</button>
             </form>
             <p class="mt-4" *ngIf="login">No tiene una cuenta? <span class="ms-2 cursor-pointer text-indigo-500
         transition-colors duration-300 hover:text-indigo-800" (click)="toggleLogin()">Registrarse</span></p>
-            <p class="mt-4" *ngIf="!login">Ya tiene una cuenta? <span class="ms-2 cursor-pointer text-indigo-500
-            transition-colors duration-300 hover:text-indigo-800" (click)="toggleLogin()">Iniciar sesion</span></p>
+            <p class="mt-4" *ngIf="!login">Ya tiene una cuenta?
+                <span class="ms-2 cursor-pointer text-indigo-500
+            transition-colors duration-300 hover:text-indigo-800" (click)="toggleLogin()">Iniciar sesion</span>
+            </p>
+        </div>
+        <div class="block mt-12">
+            <div class="h-16 w-16 m-0 p-0 mx-auto rounded-max">
+                <img src="../../../assets/img/flecha-hacia-abajo.png" class="animate-bounce w-max h-max" alt="">
+            </div>
         </div>
     </div>
     <div>
         <div class="h-full">
-            <img src="../../../assets/img/banner.jpg" class="w-max h-screen object-center object-cover grayscale"
+            <img src="../../../assets/img/banner.jpg" class="w-max h-full object-cover grayscale"
                 alt="">
         </div>
     </div>
 </div>
+@defer (on viewport) {
 <section class="bg-indigo-900 text-white pt-8">
     <div class="container mx-auto w-3/4">
         <h2 class="text-center text-4xl ">Acerca de</h2>
@@ -166,4 +175,7 @@
         </div>
     </div>
 </section>
+} @placeholder {
+<div>Features</div>
+}
 <app-footer></app-footer>

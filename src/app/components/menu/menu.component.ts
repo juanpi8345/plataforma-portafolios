@@ -12,10 +12,15 @@ import { AuthService } from '../../services/auth.service';
 export class MenuComponent {
 
   constructor(private authService:AuthService, private router:Router){}
+  role : string;
+
+  ngOnInit(){
+    this.role = this.authService.getUserRol();
+  }
 
   public logout(){
     this.authService.logout();
-    this.router.navigate(['login']);
+    this.router.navigate(['/login']);
   }
 
 }

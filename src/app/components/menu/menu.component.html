@@ -8,8 +8,13 @@
             </div>
             <div class="flex justify-center mt-4 cursor-pointer border-2 items-center 
             rounded-lg p-1 bg-indigo-100 transition-colors duration-300 hover:bg-indigo-200">
-                <img src="../../../assets/img/desarrollador.png" width="40" alt="">
-                <li class="list-none ms-3"><a >Recluters</a></li>
+                @if(role === "EMPLOYEER"){
+                    <img src="../../../assets/img/desarrollador.png" width="40" alt="">
+                    <li class="list-none ms-3"><a >Desarrolladores</a></li>
+                }@else {
+                    <img src="../../../assets/img/gerente.png" width="40" alt="">
+                    <li class="list-none ms-2"><a >Recluters</a></li>
+                }
             </div> 
             <div class="flex justify-center mt-4 cursor-pointer border-2 
             items-center rounded-lg p-1 bg-indigo-100 transition-colors duration-300 hover:bg-indigo-200">
