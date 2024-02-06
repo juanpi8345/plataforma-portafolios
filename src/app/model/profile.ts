@@ -7,5 +7,8 @@ export class Profile {
    description : string = '';
    projects : Project[] = [];
    skills : Skill[] = [];
+   //employer
+   searching : string = '';
+   skillsSearched : Skill[] = [];
 
 }

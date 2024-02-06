@@ -11,12 +11,19 @@ export class EmployerService {
 
   constructor(private http: HttpClient) { }
 
-  private apiUrl: string = "http://localhost:8080/profile/"
+  private apiUrl: string = "http://localhost:8080/employer/"
 
-  public getEmployers(page: number, skills: Skill[]): Observable<Profile[]> {
-    const skillsQueryParam = JSON.stringify(skills);
-    const queryParams = `?skills=${encodeURIComponent(skillsQueryParam)}&page=${page}&size=10`;
-    return this.http.get<Profile[]>(`${this.apiUrl}get/employers${queryParams}`);
+  public addSearchedSkill(newSkill : string):Observable<Skill>{
+    return this.http.post<Skill>(this.apiUrl+"add/searchedSkill?title="+newSkill,null);
   }
+
+  public editSearching(newSearching:string):Observable<any>{
+    return this.http.put(this.apiUrl + "edit/searching?newSearching="+newSearching,null);
+  }
+
+  public deleteSearchedSkill(skillId:number):Observable<any>{
+    return this.http.delete(this.apiUrl + "deleteSkill/"+skillId);
+  }
+
 
 }

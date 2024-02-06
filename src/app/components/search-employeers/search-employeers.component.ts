@@ -6,6 +6,7 @@ import { Skill } from '../../model/skill';
 import { SkillService } from '../../services/skill.service';
 import { Profile } from '../../model/profile';
 import { EmployerService } from '../../services/employer.service';
+import { EmployeeService } from '../../services/employee.service';
 
 @Component({
   selector: 'app-search-employeers',
@@ -19,34 +20,39 @@ export class SearchEmployeersComponent {
   skill = new FormControl();
 
   skills$!: Observable<Skill[]>;
-  employers$!: Observable<Profile[]>;
-  searchList : Skill[] = [];
+  employers$!: Observable<any>;
+  searchList : string[] = [];
 
   page : number = 0;
 
-  constructor(private skillService:SkillService, private employerService:EmployerService){
+  constructor(private skillService:SkillService, private employeeService:EmployeeService){
     this.skills$ = skillService.getSkills(); 
   }
 
-  addSkill(skill : Skill, event:Event):void{
-    console.log(skill)
+  addSkill(skill : string, event:Event):void{
     event.preventDefault();
     if(!this.skillExists(skill) && skill != null)
       this.searchList.push(skill);
+    console.log(this.searchList);
     this.getEmployers(this.searchList);
   }
 
-  removeSkill(skill:Skill):void{
+  removeSkill(skill:string):void{
     this.searchList = this.searchList.filter(item => item != skill);
   }
 
-  skillExists(skill : Skill):boolean{
+  skillExists(skill : string):boolean{
     return this.searchList.includes(skill);
   }
 
-  getEmployers(searchList: Skill[]):void{
-    this.employers$ = this.employerService.getEmployers(this.page,this.searchList);
-    this.page++;
+  getEmployers(searchList: string[]):void{
+    this.employers$ = this.employeeService.getEmployers(this.page,searchList);
   }
+
+  test(employers){
+    console.log(employers.content[0]);
+  }
+
+
 
 }
