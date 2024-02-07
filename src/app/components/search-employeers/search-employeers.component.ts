@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { Skill } from '../../../model/skill';
-import { SkillService } from '../../../services/skill.service';
-import { Profile } from '../../../model/profile';
-import { EmployerService } from '../../../services/employer.service';
-import { EmployeeService } from '../../../services/employee.service';
+import { Skill } from '../../model/skill';
+import { SkillService } from '../../services/skill.service';
+import { Profile } from '../../model/profile';
+import { EmployerService } from '../../services/employer.service';
+import { EmployeeService } from '../../services/employee.service';
 
 @Component({
   selector: 'app-search-employeers',
@@ -33,12 +33,12 @@ export class SearchEmployeersComponent {
     event.preventDefault();
     if(!this.skillExists(skill) && skill != null)
       this.searchList.push(skill);
-    console.log(this.searchList);
     this.getEmployers(this.searchList);
   }
 
   removeSkill(skill:string):void{
     this.searchList = this.searchList.filter(item => item != skill);
+    this.getEmployers(this.searchList);
   }
 
   skillExists(skill : string):boolean{
@@ -48,11 +48,6 @@ export class SearchEmployeersComponent {
   getEmployers(searchList: string[]):void{
     this.employers$ = this.employeeService.getEmployers(this.page,searchList);
   }
-
-  test(employers){
-    console.log(employers.content[0]);
-  }
-
 
 
 }

@@ -18,8 +18,6 @@ export class EmployeeService {
     return this.http.get<Profile[]>(`${this.apiUrl}get/employers${queryParams}`);
   }
 
-
-
   public addSkill(title:string):Observable<Skill>{
     return this.http.post<Skill>(this.apiUrl+"addSkill?title="+title,null);
   }
