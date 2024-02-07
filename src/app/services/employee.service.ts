@@ -18,9 +18,7 @@ export class EmployeeService {
     return this.http.get<Profile[]>(`${this.apiUrl}get/employers${queryParams}`);
   }
 
-  public editOccupation(occupations:string):Observable<any>{
-    return this.http.put(this.apiUrl + "edit/occupation?occupations="+occupations,null);
-  }
+
 
   public addSkill(title:string):Observable<Skill>{
     return this.http.post<Skill>(this.apiUrl+"addSkill?title="+title,null);

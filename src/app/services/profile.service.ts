@@ -19,4 +19,9 @@ export class ProfileService {
     return this.http.put(this.apiUrl + "edit/description?description="+description,null);
   }
 
+  public editOccupation(occupations:string):Observable<any>{
+    return this.http.put(this.apiUrl + "edit/occupation?occupations="+occupations,null);
+  }
+
+
 }

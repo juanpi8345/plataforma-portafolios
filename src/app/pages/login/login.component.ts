@@ -109,7 +109,7 @@ export class LoginComponent {
           if (data.authorities[0].authority === 'EMPLOYEE')
             this.router.navigate(['/employee/profile'])
           else
-            this.router.navigate(['/employeer/profile'])
+            this.router.navigate(['/employer/profile'])
         })   
       }, responseErr => {
         if (responseErr.status === 403) {
