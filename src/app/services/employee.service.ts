@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Skill } from '../model/skill';
 import { Profile } from '../model/profile';
+import { Employee } from '../model/employee';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,10 @@ export class EmployeeService {
   public getEmployers(page: number, skills: string[]): Observable<any> {
     const queryParams = `?skillsStr=${skills}&page=${page}&size=10`;
     return this.http.get<Profile[]>(`${this.apiUrl}get/employers${queryParams}`);
+  }
+
+  public getEmployer(profileId:number):Observable<Employee>{
+    return this.http.get<Employee>(this.apiUrl+"get/employer/"+profileId);
   }
 
   public addSkill(title:string):Observable<Skill>{

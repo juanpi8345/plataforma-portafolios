@@ -7,6 +7,7 @@ import { employeerGuard } from './services/employeer.guard';
 import { SearchEmployeersComponent } from './components/search-employeers/search-employeers.component';
 import { EmployeeProfileComponent } from './pages/employee/employee-profile/employee-profile.component';
 import { EmployerProfileComponent } from './pages/employeer/employer-profile/employer-profile.component';
+import { ViewEmployerComponent } from './pages/employee/view-employer/view-employer.component';
 
 
 export const routes: Routes = [
@@ -14,7 +15,8 @@ export const routes: Routes = [
     {path:'login',component:LoginComponent},
     {path: 'employee',component:DashboardComponent,canActivate:[employeeGuard],children:[
         {path:'profile',component:EmployeeProfileComponent},
-        {path:'search',component:SearchEmployeersComponent}
+        {path:'search',component:SearchEmployeersComponent},
+        {path: 'view/:profileId',component:ViewEmployerComponent}
     ]},
     {path: 'employer',component:EmployeerDashboardComponent,canActivate:[employeerGuard],children:[
         {path:'profile',component:EmployerProfileComponent}

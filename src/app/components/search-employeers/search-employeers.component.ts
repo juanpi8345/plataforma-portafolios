@@ -7,11 +7,12 @@ import { SkillService } from '../../services/skill.service';
 import { Profile } from '../../model/profile';
 import { EmployerService } from '../../services/employer.service';
 import { EmployeeService } from '../../services/employee.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-search-employeers',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule,ReactiveFormsModule,RouterLink],
   templateUrl: './search-employeers.component.html',
   styleUrl: './search-employeers.component.css'
 })
