@@ -1,0 +1,72 @@
+<div class="mx-auto me-20 ms-20" data-aos="fade-down" data-aos-duration="1500">
+    <div class="pb-12 p-6 rounded-md bg-white text-center h-85vh relative">
+        <div data-aos="fade-down" data-aos-duration="1200">
+            <div class="flex justify-around items-center">
+                <img src="../../../../assets/img/desarrollo-web.png" class="w-36 h-36" alt="">
+                <div>
+                    <h1 class="text-right text-2xl italic">Busqueda de desarrolladores</h1>
+                    <form *ngIf="skills$ | async as skills; else loader">
+                        <div class="text-center mt-2">
+                            <select id="skill" name="skill" class="form-select rounded-md
+            border border-color-gray p-2 transition duration-500 
+            focus:border-violet-800 focus:outline-none" [formControl]="skill">
+                                <option *ngFor="let skill of skills" [value]="skill.title">{{skill.title}}</option>
+                            </select>
+                            <button class="bg-indigo-500 text-white mt-4 p-2 rounded-md hover:bg-indigo-600  
+                        w-max transition-colors duration-300 block mx-auto"
+                                (click)="addSkill(skill.value,$event)">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="flex justify-center flex-wrap ">
+                <div class="mt-8 bg-indigo-400 p-2 rounded-md w-max ms-4 me-4" *ngFor="let skill of searchList">
+                    <div class="flex justify-around">
+                        <h4 class="text-white">{{skill}}</h4>
+                        <img src="../../../assets/img/cruzar.png " class="w-4 h-4 self-center ms-2 cursor-pointer"
+                            alt="" (click)="removeSkill(skill)">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-6" *ngIf="employees$ | async as employees;" data-aos="zoom-in" data-aos-duration="1000">
+            <div class="flex justify-center">
+                <div *ngFor="let employee of employees.content"
+                    class="mt-4 p-4 w-max m-6 rounded-md bg-white text-center shadow-md relative">
+                    <h1 class="text-lg">{{employee.name}}</h1>
+                    @if(employee.occupations != null){
+                    <h2 class="italic text-sm mt-2 text-gray-500">{{employee.occupations}}</h2>
+                    }@else {
+                    <h2 class="italic text-sm mt-2 text-gray-500">Sin rol especificado</h2>
+                    }
+                    <div class="flex justify-center mt-2">
+                        <div *ngFor="let skill of employee.skills"
+                            class="mt-2 bg-indigo-400 pt-1 pb-1 pe-2 ps-2 rounded-md w-max ms-2 me-2">
+                            <div class="flex justify-around">
+                                <h4 class="text-white">{{skill.title}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center mt-5">
+                        <button class="bg-indigo-500 ps-3 pt-2 pb-2 pe-3 ms-2 rounded-full w-max me-2
+                        hover:bg-indigo-600 transition-colors duration-300" [routerLink]='"/employer/view/"+employee.profileId'>
+                            <span class="text-white text-sm" >
+                                Ver Perfil
+                            </span>
+                        </button>
+                        <button class="ps-3 pt-2 pb-2 pe-3 ms-2 rounded-full w-max me-2 border-2 border-indigo-500
+                        hover:bg-indigo-100 transition-colors duration-300">
+                            <span class="text-indigo-500 text-sm">
+                                Mensaje
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ng-template #loader>
+            <img src="../../../../assets/img/cargando.png"
+                class="h-16 w-16 relative left-1/2 bottom-0 animate-spin" alt="">
+        </ng-template>
+    </div>
+</div>

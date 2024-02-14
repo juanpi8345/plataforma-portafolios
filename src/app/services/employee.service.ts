@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Skill } from '../model/skill';
 import { Profile } from '../model/profile';
 import { Employee } from '../model/employee';
+import { Employer } from '../model/employer';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,8 @@ export class EmployeeService {
     return this.http.get<Profile[]>(`${this.apiUrl}get/employers${queryParams}`);
   }
 
-  public getEmployer(profileId:number):Observable<Employee>{
-    return this.http.get<Employee>(this.apiUrl+"get/employer/"+profileId);
+  public getEmployer(profileId:number):Observable<Employer>{
+    return this.http.get<Employer>(this.apiUrl+"get/employer/"+profileId);
   }
 
   public addSkill(title:string):Observable<Skill>{

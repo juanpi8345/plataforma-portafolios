@@ -4,10 +4,12 @@ import { DashboardComponent } from './pages/employee/dashboard/dashboard.compone
 import { employeeGuard } from './services/employee.guard';
 import { EmployeerDashboardComponent } from './pages/employeer/employeer-dashboard/employeer-dashboard.component';
 import { employeerGuard } from './services/employeer.guard';
-import { SearchEmployeersComponent } from './components/search-employeers/search-employeers.component';
+import { SearchEmployeersComponent } from './pages/employee/search-employeers/search-employeers.component';
 import { EmployeeProfileComponent } from './pages/employee/employee-profile/employee-profile.component';
 import { EmployerProfileComponent } from './pages/employeer/employer-profile/employer-profile.component';
 import { ViewEmployerComponent } from './pages/employee/view-employer/view-employer.component';
+import { SearchEmployeesComponent } from './pages/employeer/search-employees/search-employees.component';
+import { ViewEmployeeComponent } from './pages/employeer/view-employee/view-employee.component';
 
 
 export const routes: Routes = [
@@ -19,7 +21,9 @@ export const routes: Routes = [
         {path: 'view/:profileId',component:ViewEmployerComponent}
     ]},
     {path: 'employer',component:EmployeerDashboardComponent,canActivate:[employeerGuard],children:[
-        {path:'profile',component:EmployerProfileComponent}
+        {path:'profile',component:EmployerProfileComponent},
+        {path:'search',component:SearchEmployeesComponent},
+        {path: 'view/:profileId',component:ViewEmployeeComponent}
     ]},
     { path: '**', redirectTo: 'login', pathMatch:'full'},
 ];

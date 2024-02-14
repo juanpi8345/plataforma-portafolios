@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { Skill } from '../../model/skill';
-import { SkillService } from '../../services/skill.service';
-import { Profile } from '../../model/profile';
-import { EmployerService } from '../../services/employer.service';
-import { EmployeeService } from '../../services/employee.service';
+import { Skill } from '../../../model/skill';
+import { SkillService } from '../../../services/skill.service';
+import { Profile } from '../../../model/profile';
+import { EmployerService } from '../../../services/employer.service';
+import { EmployeeService } from '../../../services/employee.service';
 import { RouterLink } from '@angular/router';
 
 @Component({
