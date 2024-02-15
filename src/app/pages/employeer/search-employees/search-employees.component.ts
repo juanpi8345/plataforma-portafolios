@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { SkillService } from '../../../services/skill.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription, delay } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EmployerService } from '../../../services/employer.service';
 import { Skill } from '../../../model/skill';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { Employee } from '../../../model/employee';
 
 @Component({
   selector: 'app-search-employees',
@@ -20,7 +21,17 @@ export class SearchEmployeesComponent {
 
   skills$!: Observable<Skill[]>;
   employees$!: Observable<any>;
+
   searchList : string[] = [];
+
+  //to iterate and view a paginated template
+  numbers : number[] = [];
+
+  //total pages of the elements  
+  totalPages : number;
+
+  employees:Employee[];
+  getTotalPagesSubscription : Subscription;
 
   page : number = 0;
 
@@ -45,8 +56,32 @@ export class SearchEmployeesComponent {
   }
 
   getEmployers(searchList: string[]):void{
-    this.employees$ = this.employerService.getEmployees(this.page,searchList);
+    this.numbers = [];
+    this.getTotalPagesSubscription = this.employerService.getEmployees(this.page,searchList).subscribe((data)=>{
+      this.totalPages = data.totalPages;
+      this.employees = data.content;
+      this.fillNumbers();
+    })
   }
 
+  ngOnDestroy():void{
+    if(this.getTotalPagesSubscription){
+      this.getTotalPagesSubscription.unsubscribe();
+    }
+  }
 
+  //aux
+  //to iterate we need to fill the array numbers knowing the number of the total pages
+  fillNumbers():void{
+    for(let i = 1; i <= this.totalPages; i++){
+      this.numbers.push(i);
+    }
+  }
+
+  changePage(pageNumber:number):void{
+      this.page = pageNumber;
+      this.getEmployers(this.searchList);
+  }
+
+ 
 }
