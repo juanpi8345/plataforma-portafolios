@@ -20,7 +20,6 @@ export class SearchEmployeesComponent {
   skill = new FormControl();
 
   skills$!: Observable<Skill[]>;
-  employees$!: Observable<any>;
 
   searchList : string[] = [];
 
@@ -43,19 +42,19 @@ export class SearchEmployeesComponent {
     event.preventDefault();
     if(!this.skillExists(skill) && skill != null)
       this.searchList.push(skill);
-    this.getEmployers(this.searchList);
+    this.getEmployees(this.searchList);
   }
 
   removeSkill(skill:string):void{
     this.searchList = this.searchList.filter(item => item != skill);
-    this.getEmployers(this.searchList);
+    this.getEmployees(this.searchList);
   }
 
   skillExists(skill : string):boolean{
     return this.searchList.includes(skill);
   }
 
-  getEmployers(searchList: string[]):void{
+  getEmployees(searchList: string[]):void{
     this.numbers = [];
     this.getTotalPagesSubscription = this.employerService.getEmployees(this.page,searchList).subscribe((data)=>{
       this.totalPages = data.totalPages;
@@ -80,7 +79,7 @@ export class SearchEmployeesComponent {
 
   changePage(pageNumber:number):void{
       this.page = pageNumber;
-      this.getEmployers(this.searchList);
+      this.getEmployees(this.searchList);
   }
 
  

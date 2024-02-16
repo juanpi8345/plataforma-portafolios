@@ -29,17 +29,17 @@
                 </div>
             </div>
         </div>
-        <div class="mt-6" *ngIf="employers$ | async as employers;" data-aos="zoom-in" data-aos-duration="1000">
-            <div class="flex justify-center">
-                <div *ngFor="let employer of employers.content"
-                    class="mt-4 p-4 w-max m-6 rounded-md bg-white text-center shadow-md relative">
+        <div class="mt-6" *ngIf="employers" >
+            <div class="flex justify-center flex-wrap">
+                <div *ngFor="let employer of employers"
+                    class="mt-4 p-4 w-max m-6 rounded-md bg-white text-center shadow-md relative" data-aos="zoom-in" data-aos-duration="1000">
                     <h1 class="text-lg">{{employer.name}}</h1>
                     @if(employer.occupations != null){
                     <h2 class="italic text-sm mt-2 text-gray-500">{{employer.occupations}}</h2>
                     }@else {
                     <h2 class="italic text-sm mt-2 text-gray-500">Sin rol especificado</h2>
                     }
-                    <div class="flex justify-center mt-2">
+                    <div class="flex justify-center mt-2 w-64 flex-wrap">
                         <div *ngFor="let skill of employer.searchedSkills"
                             class="mt-2 bg-indigo-400 pt-1 pb-1 pe-2 ps-2 rounded-md w-max ms-2 me-2">
                             <div class="flex justify-around">
@@ -61,6 +61,13 @@
                             </span>
                         </button>
                     </div>
+                </div>
+            </div>
+            <div class="mt-4 flex justify-center mx-auto bg-indigo-100 w-max rounded-md">
+                <div *ngFor="let number of numbers" class="border rounded-md 
+                 ps-3 pt-2 pb-2 pe-3 transition-colors hover:bg-indigo-300 cursor-pointer" (click)="changePage(number-1)"
+                  [ngClass]="{'bg-indigo-300':number == page +1 }">
+                    <h4 class="text-sm" >{{number}}</h4>
                 </div>
             </div>
         </div>

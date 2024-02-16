@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Skill } from '../../../model/skill';
 import { SkillService } from '../../../services/skill.service';
 import { Profile } from '../../../model/profile';
 import { EmployerService } from '../../../services/employer.service';
 import { EmployeeService } from '../../../services/employee.service';
 import { RouterLink } from '@angular/router';
+import { Employer } from '../../../model/employer';
 
 @Component({
   selector: 'app-search-employeers',
@@ -18,11 +19,21 @@ import { RouterLink } from '@angular/router';
 })
 export class SearchEmployeersComponent {
 
-  skill = new FormControl();
+  skill = new FormControl('Angular');
 
   skills$!: Observable<Skill[]>;
-  employers$!: Observable<any>;
+
+  
   searchList : string[] = [];
+ 
+  //to iterate and view a paginated template
+  numbers : number[] = [];
+
+  //total pages of the elements  
+  totalPages : number;
+
+  employers:Employer[];
+  getTotalPagesSubscription : Subscription;
 
   page : number = 0;
 
@@ -47,8 +58,34 @@ export class SearchEmployeersComponent {
   }
 
   getEmployers(searchList: string[]):void{
-    this.employers$ = this.employeeService.getEmployers(this.page,searchList);
+    this.numbers = [];
+    this.getTotalPagesSubscription = this.employeeService.getEmployers(this.page,searchList).subscribe((data)=>{
+      this.totalPages = data.totalPages;
+      this.employers = data.content;
+      this.fillNumbers();
+    })
   }
+
+  ngOnDestroy():void{
+    if(this.getTotalPagesSubscription){
+      this.getTotalPagesSubscription.unsubscribe();
+    }
+  }
+
+  //aux
+  //to iterate we need to fill the array numbers knowing the number of the total pages
+  fillNumbers():void{
+    for(let i = 1; i <= this.totalPages; i++){
+      this.numbers.push(i);
+    }
+  }
+
+  changePage(pageNumber:number):void{
+      this.page = pageNumber;
+      this.getEmployers(this.searchList);
+  }
+
+
 
 
 }
