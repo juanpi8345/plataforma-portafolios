@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../services/chat.service';
 import { ChatMessage } from '../../model/chat-message';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Message } from '../../model/message';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -15,23 +15,28 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.css'
 })
-export class MessagesComponent {
+export class MessagesComponent{
   profileId:number;
   getCurrentUserSubscription:Subscription;
   receiverId:number;
   messageInput : string = '';
   messageList : Message[] = [];
+  historicalMessages$! : Observable<any[]>
 
   constructor(private chatService:ChatService, private route:ActivatedRoute,private router:Router
     ,private authService:AuthService) {
   }
 
   ngOnInit():void{
-    this.getCurrentUserSubscription = this.authService.get().subscribe(user=>{
-      this.profileId = user.profile.profileId;
-    })
+    this.route.params.subscribe((params: Params) => {
+      this.receiverId = params['receiverId'];
+      this.getCurrentUserSubscription = this.authService.get().subscribe(user=>{
+        this.profileId = user.profile.profileId;
+        this.historicalMessages$ = this.chatService.getChatMessages(this.receiverId,this.profileId);
+      })
+    });
+ 
 
-    this.receiverId = this.route.snapshot.params["receiverId"];
     this.chatService.connect();
     this.listenerMessage();
   }

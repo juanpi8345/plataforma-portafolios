@@ -50,7 +50,7 @@ export class ChatService {
     return this.http.get<Chat[]>(this.apiUrl+"profile/"+profileId);
   }
 
-  getChatMessages(senderId:number,receiverId):Observable<Message[]>{
-    return this.http.get<Message>(this.apiUrl)
+  getChatMessages(profileId1:number,profileId2:number):Observable<Message[]>{
+    return this.http.get<Message[]>(this.apiUrl+"profile1/"+profileId1+"/profile2/"+profileId2);
   }
 }

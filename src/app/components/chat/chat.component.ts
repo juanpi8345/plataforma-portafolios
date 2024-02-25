@@ -13,7 +13,7 @@ import { MessagesComponent } from '../messages/messages.component';
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [FormsModule,CommonModule,MessagesComponent,RouterOutlet,MessagesComponent],
+  imports: [FormsModule,CommonModule,MessagesComponent,RouterOutlet,MessagesComponent,RouterLink],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
