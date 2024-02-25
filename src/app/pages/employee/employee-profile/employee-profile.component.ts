@@ -47,9 +47,6 @@ export class EmployeeProfileComponent {
 
   ngOnInit() {
     this.role = this.authService.getUserRol();
-    this.authService.get().subscribe(user=>{
-      console.log(user);
-    })
   }
 
 

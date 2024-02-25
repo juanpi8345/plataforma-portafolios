@@ -1,0 +1,11 @@
+<div class=" py-2 px-4 text-center flex">
+    <div></div>
+    <!-- Mensajes de tiempo real -->
+    <div *ngFor="let item of messageList">
+      {{item.content}}
+    </div>
+    <input type="text" placeholder="Escriba su mensaje..."
+      class="w-1/3 rounded-full px-4 py-2 bg-white border-none outline-none focus:ring-2 focus:ring-indigo-500"
+      [(ngModel)]="messageInput">
+    <button class="border round-md p-2" (click)="sendMessage()" [disabled]="this.profileId == undefined ">Enviar</button>
+  </div>

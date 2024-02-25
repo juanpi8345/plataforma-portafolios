@@ -17,7 +17,7 @@ import { Employee } from '../../../model/employee';
 })
 export class SearchEmployeesComponent {
 
-  skill = new FormControl();
+  skill = new FormControl('Angular');
 
   skills$!: Observable<Skill[]>;
 
