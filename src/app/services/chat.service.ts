@@ -27,12 +27,17 @@ export class ChatService {
     this.stompClient = Stomp.over(socket);
   }
 
+  closeWebSocket() {
+    if (this.stompClient) {
+      this.stompClient.disconnect();
+    }
+  }
+
  connect(){
     this.stompClient.connect({},()=>{
       this.stompClient.subscribe("/topic/messages",(messages:any)=>{
           const messageContent = JSON.parse(messages.body);
           const currentMessage = this.messageSubject.getValue();
-          console.log(messageContent);
           currentMessage.push(messageContent);
           this.messageSubject.next(currentMessage);
       })

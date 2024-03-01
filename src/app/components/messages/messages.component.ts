@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../services/chat.service';
@@ -7,11 +7,15 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Message } from '../../model/message';
 import { Observable, Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { ProfileService } from '../../services/profile.service';
+
+
+
 
 @Component({
   selector: 'app-messages',
   standalone: true,
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule,CommonModule,DatePipe],
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.css'
 })
@@ -22,23 +26,26 @@ export class MessagesComponent{
   messageInput : string = '';
   messageList : Message[] = [];
   historicalMessages$! : Observable<any[]>
+  receiverProfile$! : Observable<any>
 
   constructor(private chatService:ChatService, private route:ActivatedRoute,private router:Router
-    ,private authService:AuthService) {
+    ,private authService:AuthService,private datePipe: DatePipe, private profileService:ProfileService) {
   }
 
   ngOnInit():void{
     this.route.params.subscribe((params: Params) => {
+      this.messageList = [];
+      this.historicalMessages$ = null;
       this.receiverId = params['receiverId'];
+      this.receiverProfile$ = this.profileService.getProfile(this.receiverId);
       this.getCurrentUserSubscription = this.authService.get().subscribe(user=>{
         this.profileId = user.profile.profileId;
         this.historicalMessages$ = this.chatService.getChatMessages(this.receiverId,this.profileId);
       })
     });
- 
-
-    this.chatService.connect();
     this.listenerMessage();
+
+
   }
 
   sendMessage(){
@@ -61,7 +68,12 @@ export class MessagesComponent{
     })
   }
 
+  formatDate(date:any):string{
+    return this.datePipe.transform(date, 'd/M/yy, h:mm a');
+  }
+
   ngOnDestroy():void{
+    this.messageList = [];
     if(this.getCurrentUserSubscription)
       this.getCurrentUserSubscription.unsubscribe();
   }

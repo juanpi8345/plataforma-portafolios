@@ -1,20 +1,40 @@
-<div class="py-2 px-4 text-center flex flex-col">
-    <div *ngIf="historicalMessages$ | async as messages">
-        <div *ngFor="let message of messages">
-            {{message.content}}
-        </div>
+<div class="text-center flex flex-col h-80vh " [ngClass]="{'items-center':!historicalMessages$}">
+  <div *ngIf="receiverProfile$ | async as profile" class="bg-indigo-300 w-full flex justify-start p-2 mb-4">
+    <div class="flex items-center ms-2">
+      <img src="../../../assets/img/anonimo.png" class="w-8 h-8" alt="">
+      <h1 class="ms-2 text-lg">{{profile.name}}</h1>
     </div>
-    <!-- Mensajes de tiempo real -->
-    <div *ngFor="let item of messageList">
-      {{item.content}}
+  </div>
+  <div *ngIf="historicalMessages$ | async as messages; else loader" data-aos="zoom-in" data-aos-duration="1200"
+    class="">
+    <div *ngFor="let item of messages" class="flex w-full ps-4 pe-4 pt-2 pb-2"
+      [ngClass]="{'justify-end':this.profileId == item.sender.profileId}">
+      <div class="ps-4 pe-4 pb-2 pt-2 w-max mb-6" [ngClass]="{'bg-indigo-300':this.profileId == item.sender.profileId,
+      'bg-indigo-100':this.profileId != item.sender.profileId}">
+        <h2 class="text-lg">{{item.content}}</h2>
+        <h6 class="text-sm mt-1">{{formatDate(item.date)}}</h6>
+      </div>
     </div>
-    <div class="flex justify-center">
-      <input type="text" placeholder="Escriba su mensaje..."
-      class="w-2/3 rounded-full px-4 py-2 bg-white border-none outline-none focus:ring-2 focus:ring-indigo-500"
+  </div>
+  <ng-template #loader>
+    <img src="../../../../assets/img/cargando.png" class="h-12 w-12 animate-spin" alt="">
+  </ng-template>
+  <!-- Mensajes de tiempo real -->
+  <div *ngFor="let item of messageList" class="flex w-full ps-4 pe-4  pt-2 pb-2" 
+    [ngClass]="{'justify-end':this.profileId == item.sender.profileId}">
+    <div class="w-max mb-6 ps-4 pe-4 pb-2 pt-2" [ngClass]="{'bg-indigo-300':this.profileId == item.sender.profileId,
+      'bg-indigo-100':this.profileId != item.sender.profileId}">
+      <h2 class="text-lg">{{item.content}}</h2>
+      <h6 class="text-sm mt-1">{{formatDate(item.date)}}</h6>
+    </div>
+  </div>
+  <div class="flex justify-center mt-4 p-4">
+    <input type="text" placeholder="Escriba su mensaje..."
+      class="w-2/3 rounded-full px-4 py-2  border-none outline-none focus:ring-2 bg-indigo-100 focus:ring-indigo-500"
       [(ngModel)]="messageInput">
     <button class="ms-4" (click)="sendMessage()" [disabled]="this.profileId == undefined ">
       <img src="../../../assets/img/dm.png" class="h-10 w-10" alt="">
     </button>
-    </div>
-  
   </div>
+
+</div>

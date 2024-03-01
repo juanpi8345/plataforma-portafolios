@@ -30,7 +30,7 @@ export const routes: Routes = [
         {path:'search',component:SearchEmployeesComponent},
         {path: 'view/:profileId',component:ViewEmployeeComponent},
         {path: 'chat',component:ChatComponent,children:[
-            {path: ':receiverId',component:MessagesComponent}
+            {path: 'profile/:receiverId',component:MessagesComponent}
         ]}
     ]},
     { path: '**', redirectTo: 'login', pathMatch:'full'},

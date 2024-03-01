@@ -157,7 +157,7 @@ export class EmployerProfileComponent {
       confirmButtonColor: '#8a2be2',
     }).then((result) => {
       if (result.isConfirmed) {
-        user.profile.searchedSkills = user.profile.skillsSearched.filter(skill => skill.skillId !== skillId)
+        user.profile.searchedSkills = user.profile.searchedSkills.filter(skill => skill.skillId !== skillId)
         this.deleteSkillSubscription = this.employerService.deleteSearchedSkill(skillId).subscribe();
       };
     });

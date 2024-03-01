@@ -32,14 +32,16 @@ export class ChatComponent {
   }
 
   ngOnInit():void{
+    this.chatService.initConnectionSocket();
+    this.chatService.connect();
     this.getCurrentUserSubscription = this.authService.get().subscribe(user=>{
       this.profileId = user.profile.profileId;
       this.chats$ = this.chatService.getProfileChats(this.profileId);
     })
   }
 
-
   ngOnDestroy():void{
+    this.chatService.closeWebSocket();
     if(this.getCurrentUserSubscription)
       this.getCurrentUserSubscription.unsubscribe();
   }

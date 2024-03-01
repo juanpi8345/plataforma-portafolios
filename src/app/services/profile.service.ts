@@ -11,6 +11,10 @@ export class ProfileService {
 
   private apiUrl : string  = "http://localhost:8080/profile/"
 
+  public getProfile(profileId:number):Observable<any>{
+    return this.http.get(this.apiUrl+"get/"+profileId);
+  }
+
   public editName(name:string):Observable<any>{
     return this.http.put(this.apiUrl + "edit/name?name="+name,null);
   }
