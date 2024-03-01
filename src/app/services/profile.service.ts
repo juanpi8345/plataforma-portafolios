@@ -15,6 +15,10 @@ export class ProfileService {
     return this.http.get(this.apiUrl+"get/"+profileId);
   }
 
+  public getRecommended():Observable<any>{
+    return this.http.get(this.apiUrl+"get/recommended");
+  }
+
   public editName(name:string):Observable<any>{
     return this.http.put(this.apiUrl + "edit/name?name="+name,null);
   }

@@ -21,8 +21,11 @@ export class ViewEmployeeComponent {
   employee$!: Observable<any>;
 
   ngOnInit() {
-    this.profileId = this.route.snapshot.params['profileId'];
-    this.employee$ = this.employerService.getEmployee(this.profileId);
+    this.route.params.subscribe(params=>{
+      this.profileId = this.route.snapshot.params['profileId'];
+      this.employee$ = this.employerService.getEmployee(this.profileId);
+    })
+
   }
 
 }
