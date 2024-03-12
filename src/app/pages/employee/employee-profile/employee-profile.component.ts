@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProfileService } from '../../../services/profile.service';
 import { EmployeeService } from '../../../services/employee.service';
 import { SkillService } from '../../../services/skill.service';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
-import { Observable, Subscription, catchError } from 'rxjs';
+import { Observable, Subscription, catchError, map } from 'rxjs';
 import { Skill } from '../../../model/skill';
 import { User } from '../../../model/user';
 import Swal from 'sweetalert2';
@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-employee-profile',
   standalone: true,
-  imports: [ReactiveFormsModule,CommonModule],
+  imports: [ReactiveFormsModule,CommonModule,FormsModule],
   templateUrl: './employee-profile.component.html',
   styleUrl: './employee-profile.component.css'
 })
@@ -28,12 +28,14 @@ export class EmployeeProfileComponent {
       throw new Error;
     }));
     this.skills$ = this.skillService.getSkills();
+    this.loadImage();
   }
 
   user$!: Observable<any>;
 
   skills$!: Observable<Skill[]>;
   addSkill: boolean = false;
+  image$! : Observable<any>;
 
   editOccupationSubscription: Subscription;
   editSearchingSubscription: Subscription;
@@ -44,6 +46,14 @@ export class EmployeeProfileComponent {
   skill = new FormControl('Angular');
 
   role: string;
+  imageUrl : string;
+
+  selectedFile: File;
+  retrievedImage: any;
+  base64Data: any;
+  retrieveResonse: any;
+  message: string;
+  imageName: any;
 
   ngOnInit() {
     this.role = this.authService.getUserRol();
@@ -144,16 +154,27 @@ export class EmployeeProfileComponent {
     });
   }
 
+  onFileSelected(event) {
+    this.selectedFile = <File>event.target.files[0];
+  }
+  
+  loadImage(): void {
+    this.image$ = this.profileService.getImage().pipe(
+      map(blob => {
+        return URL.createObjectURL(blob);
+      })
+    );
+  }
+    
 
-  //Aux
-  public skillExists(title: string, user: any) {
-    for (let skill of user.profile.skills) {
-      if (skill.title === title)
-        return true;
-    }
-    return false;
+  onUpload() {
+    this.profileService.uploadImage(this.selectedFile).subscribe(()=>{
+
+    });
   }
 
+  
+   
 
   ngOnDestroy() {
     if (this.addSkillSubscription)
@@ -171,4 +192,15 @@ export class EmployeeProfileComponent {
     if (this.deleteSkillSubscription)
       this.deleteSkillSubscription.unsubscribe();
   }
+
+
+  //Aux
+  public skillExists(title: string, user: any) {
+    for (let skill of user.profile.skills) {
+      if (skill.title === title)
+        return true;
+    }
+    return false;
+  }
+
 }
