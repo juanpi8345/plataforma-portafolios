@@ -1,13 +1,27 @@
 <div class="mx-auto me-20 ms-20" data-aos="fade-down" data-aos-duration="1500">
     <div class="pb-12 rounded-md bg-white text-center h-85vh relative">
         <div *ngIf="user$ | async as user; else loader" data-aos="fade-down" data-aos-duration="1200">
-            <div class="p-0 h-40 bg-indigo-400 relative">
-                <div class="h-28 w-28  absolute left-5 top-1/2 centrar-y">
-                    @if(true){
+            <div class="p-0 h-44 bg-indigo-400 relative">
+                <div class="absolute left-5 top-1/2 centrar-y">
+                    <div class="w-32 h-32 border-2 rounded-full border-indigo-300 bg-indigo-300 p-1 relative">
+                        <div *ngIf="image$ | async as image; else imageNull" class="h-full w-full" data-aos="fade-in" data-aos-duration="1200">
+                            <img [src]="image" class="h-full w-full object-cover object-center rounded-full" alt="">
+                        </div>
+                        <ng-template #imageNull>
+                            <img src="../../../../assets/img/anonimo.png" class="h-max object-cover rounded-full"
+                                alt="">
+                        </ng-template>
+                        <label for="file-upload" class="absolute right-0 bottom-0 cursor-pointer bg-white rounded-full">
+                            <input type="file" id = "file-upload" accept="image/*" 
+                            class="hidden" (change)="onFileSelected($event)">
+                            <img src="../../../../assets/img/flecha-arriba.png" class="w-8 h-8 ">
+                        </label>
+                    </div>
+                    <!-- @if(true){
                     <img src="../../../../assets/img/anonimo.png" class="h-max object-cover  rounded-full" alt="">
                     }@else {
                     <img [src]="" class="h-max object-cover rounded-full" alt=""> will be soon...
-                    }
+                    } -->
                 </div>
             </div>
             <div class="ps-4 pe-4 mt-4">

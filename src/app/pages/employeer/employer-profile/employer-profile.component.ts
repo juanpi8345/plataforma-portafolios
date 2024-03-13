@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { User } from '../../../model/user';
 import Swal from 'sweetalert2';
-import { Observable, Subscription, catchError } from 'rxjs';
+import { Observable, Subscription, catchError, map } from 'rxjs';
 import { Skill } from '../../../model/skill';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
@@ -35,6 +35,8 @@ export class EmployerProfileComponent {
   user$!: Observable<any>;
   skills$!: Observable<Skill[]>;
 
+  image$! : Observable<any>;
+
   addSkill: boolean = false;
 
   editSearchingSubscription: Subscription;
@@ -44,6 +46,9 @@ export class EmployerProfileComponent {
   deleteSkillSubscription: Subscription;
 
   skill = new FormControl('Angular');
+
+  
+  selectedFile: File;
 
   role: string;
 
@@ -171,6 +176,27 @@ export class EmployerProfileComponent {
     }
     return false;
   }
+
+  onFileSelected(event) {
+    this.selectedFile = <File>event.target.files[0];
+    this.onUpload();
+  }
+  
+  loadImage(): void {
+    this.image$ = this.profileService.getImage().pipe(
+      map(blob => {
+        return URL.createObjectURL(blob);
+      })
+    );
+  }
+    
+
+  onUpload() {
+    this.profileService.uploadImage(this.selectedFile).subscribe(()=>{
+      this.loadImage();
+    });
+  }
+
 
   ngOnDestroy() {
     if (this.addSkillSubscription)

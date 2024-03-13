@@ -49,12 +49,7 @@ export class EmployeeProfileComponent {
   imageUrl : string;
 
   selectedFile: File;
-  retrievedImage: any;
-  base64Data: any;
-  retrieveResonse: any;
-  message: string;
-  imageName: any;
-
+ 
   ngOnInit() {
     this.role = this.authService.getUserRol();
   }
@@ -156,6 +151,7 @@ export class EmployeeProfileComponent {
 
   onFileSelected(event) {
     this.selectedFile = <File>event.target.files[0];
+    this.onUpload();
   }
   
   loadImage(): void {
@@ -169,7 +165,7 @@ export class EmployeeProfileComponent {
 
   onUpload() {
     this.profileService.uploadImage(this.selectedFile).subscribe(()=>{
-
+      this.loadImage();
     });
   }
 
