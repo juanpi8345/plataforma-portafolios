@@ -4,7 +4,7 @@ import { ChatMessage } from '../../model/chat-message';
 import { ActivatedRoute, Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, catchError } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../model/user';
 import { Chat } from '../../model/chat';

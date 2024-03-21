@@ -22,7 +22,6 @@ export class SearchEmployeersComponent {
   skill = new FormControl('Angular');
 
   skills$!: Observable<Skill[]>;
-
   
   searchList : string[] = [];
  
@@ -63,6 +62,9 @@ export class SearchEmployeersComponent {
       this.totalPages = data.totalPages;
       this.employers = data.content;
       this.fillNumbers();
+    },responseErr=>{
+      if(responseErr.status == 404)
+        this.employers = [];
     })
   }
 

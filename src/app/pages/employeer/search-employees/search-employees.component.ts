@@ -60,6 +60,9 @@ export class SearchEmployeesComponent {
       this.totalPages = data.totalPages;
       this.employees = data.content;
       this.fillNumbers();
+    },responseErr=>{
+      if(responseErr.status == 404)
+          this.employees = [];
     })
   }
 

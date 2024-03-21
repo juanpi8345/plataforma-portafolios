@@ -3,7 +3,7 @@
         <h1 class="text-center text-xl">
             Perfiles que te recomendamos contactar
         </h1>
-        <div *ngIf="recommendedProfiles$ | async as profiles; " class="mt-4">
+        <div *ngIf="recommendedProfiles$ | async as profiles; else noProfiles;" class="mt-4">
             <div class="p-4 rounded-md bg-indigo-100 text-center shadow-lg mb-4 mt-4" *ngFor="let profile of profiles">
                 <div class="flex items-center justify-between">
                     <div class="flex">
@@ -29,14 +29,15 @@
                     </div>
                 </div>
             </div>
-            <div  *ngIf="profiles.length == 0" class="text-center">
-                <div class="flex justify-center">
-                    <img src="../../../assets/img/error-404.png" class="w-16 h-16" alt="">
-                </div>
-                <h1 class="text-md mt-2">
-                    Nada por aqui...
-                </h1>
-            </div>
+            
         </div>
+        <ng-template #noProfiles class="text-center">
+            <div class="flex justify-center">
+                <img src="../../../assets/img/error-404.png" class="w-16 h-16" alt="">
+            </div>
+            <h1 class="text-md mt-2">
+                Nada por aqui...
+            </h1>
+        </ng-template>
     </div>
 </div>

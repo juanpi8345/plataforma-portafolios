@@ -13,14 +13,14 @@ import { RouterLink } from '@angular/router';
 })
 export class RecommendedComponent {
 
-  constructor(private profileService:ProfileService) {
+  constructor(public profileService:ProfileService) {
     
   }
 
-  recommendedProfiles$!:Observable<any>;
+  recommendedProfiles$!:Observable<any> ;
 
   ngOnInit():void{
-   this.recommendedProfiles$ = this.profileService.getRecommended();
+    this.recommendedProfiles$ = this.profileService.getRecommended();
   }
 
 }

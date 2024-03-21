@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { ChatMessage } from '../model/chat-message';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, catchError } from 'rxjs';
 import { Chat } from '../model/chat';
 import { HttpClient } from '@angular/common/http';
 import { Message } from 'postcss';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +53,10 @@ export class ChatService {
   }
 
   getProfileChats(profileId:number):Observable<Chat[]>{
-    return this.http.get<Chat[]>(this.apiUrl+"profile/"+profileId);
+    return this.http.get<Chat[]>(this.apiUrl+"profile/"+profileId).pipe(catchError(error=>{
+      Swal.fire("Alerta","No tiene chats con ningun usuario","warning")
+      return [];
+    }));
   }
 
   getChatMessages(profileId1:number,profileId2:number):Observable<Message[]>{

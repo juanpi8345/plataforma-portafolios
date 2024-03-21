@@ -30,6 +30,7 @@ export class EmployerProfileComponent {
       throw new Error;
     }));
     this.skills$ = this.skillService.getSkills();
+    this.loadImage();
   }
 
   user$!: Observable<any>;

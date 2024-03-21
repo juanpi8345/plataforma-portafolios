@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,9 @@ export class ProfileService {
   
 
   public getRecommended():Observable<any>{
-    return this.http.get(this.apiUrl+"get/recommended");
+    return this.http.get(this.apiUrl+"get/recommended").pipe(catchError(error=>{
+      return null;
+    }));
   }
 
   public editName(name:string):Observable<any>{

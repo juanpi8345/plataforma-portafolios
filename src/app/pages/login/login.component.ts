@@ -69,7 +69,8 @@ export class LoginComponent {
       this.user.email = this.registerForm.get('email')?.value ?? '';
       this.user.role = this.registerForm.get('role')?.value ?? '';
       this.user.password = this.registerForm.get('password')?.value ?? '';
-      this.authService.registerUser(this.user).subscribe(() => {
+      this.authService.registerUser(this.user).subscribe((data) => {
+        console.log("hola")
         Swal.fire({
           icon: 'success',
           title: 'Usuario registrado',
@@ -79,7 +80,7 @@ export class LoginComponent {
         this.login = true;
         this.registerForm.reset();
       }, responseErr => {
-        if (responseErr.status === 409) {
+        if (responseErr.status === 400) {
           Swal.fire({
             icon: 'error',
             title: 'Username ya registrado',
@@ -87,15 +88,16 @@ export class LoginComponent {
             confirmButtonColor: '#8a2be2',
           });
         }
+        else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error inesperado',
+            text: 'Por favor contacte con el administrador',
+            confirmButtonColor: '#8a2be2',
+          });
+        }
       })
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error inesperado',
-        text: 'Por favor contacte con el administrador',
-        confirmButtonColor: '#8a2be2',
-      });
-    }
+    } 
   }
 
   authenticate(): void {

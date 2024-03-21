@@ -5,7 +5,7 @@
                 <img src="../../../../assets/img/desarrollo-web.png" class="w-36 h-36" alt="">
                 <div>
                     <h1 class="text-right text-2xl italic">Busqueda de desarrolladores</h1>
-                    <form *ngIf="skills$ | async as skills; else loader">
+                    <form *ngIf="skills$ | async as skills;">
                         <div class="text-center mt-2">
                             <select id="skill" name="skill" class="form-select rounded-md
             border border-color-gray p-2 transition duration-500 
