@@ -6,5 +6,6 @@ export class Profile {
    name : string = '';
    occupations : string = '';
    description : string = '';
+   image : string = '';
 
 }

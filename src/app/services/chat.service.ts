@@ -55,7 +55,7 @@ export class ChatService {
   getProfileChats(profileId:number):Observable<Chat[]>{
     return this.http.get<Chat[]>(this.apiUrl+"profile/"+profileId).pipe(catchError(error=>{
       Swal.fire("Alerta","No tiene chats con ningun usuario","warning")
-      return [];
+      return Chat[''];
     }));
   }
 

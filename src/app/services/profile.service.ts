@@ -25,6 +25,10 @@ export class ProfileService {
     return this.http.get(this.apiUrl+"get/image",{ responseType: 'blob' });
   }
   
+  public getOtherProfileImage(profileId:number):Observable<any>{
+    return this.http.get(this.apiUrl+profileId+"/get/image",{ responseType: 'blob' });
+  }
+  
 
   public getRecommended():Observable<any>{
     return this.http.get(this.apiUrl+"get/recommended").pipe(catchError(error=>{

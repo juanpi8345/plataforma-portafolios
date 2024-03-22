@@ -3,33 +3,36 @@
         <h1 class="text-center text-xl">
             Perfiles que te recomendamos contactar
         </h1>
-        <div *ngIf="recommendedProfiles$ | async as profiles; else noProfiles;" class="mt-4">
-            <div class="p-4 rounded-md bg-indigo-100 text-center shadow-lg mb-4 mt-4" *ngFor="let profile of profiles">
-                <div class="flex items-center justify-between">
-                    <div class="flex">
-                        <img src="../../../assets/img/anonimo.png" class="w-8 h-8" alt="">
-                        <h1 class="text-xl ms-2">
-                            {{profile.name}}
-                        </h1>
-                    </div>
-                    <div>
-                        <button class="bg-indigo-500 ps-3 pt-2 pb-2 pe-3 ms-2 rounded-full w-max me-2
+        <div class="p-4 rounded-md bg-indigo-100 text-center shadow-lg mb-4 mt-4"
+            *ngFor="let profile of recommendedProfiles">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    @if(profile.image != null){
+                    <img [src]="profile.image" class="rounded-full w-12 h-12" alt="">
+                    }
+                    @else {
+                    <img src="../../../assets/img/anonimo.png" class="rounded-full w-12 h-12" alt="">
+                    }
+                    <h1 class="text-xl ms-2">
+                        {{profile.name}}
+                    </h1>
+                </div>
+                <div>
+                    <button class="bg-indigo-500 ps-3 pt-2 pb-2 pe-3 ms-2 rounded-full w-max me-2
                         hover:bg-indigo-600 transition-colors duration-300" [routerLink]='"view/"+profile.profileId'>
-                            <span class="text-white text-sm">
-                                Ver Perfil
-                            </span>
-                        </button>
-                        <button class="ps-3 pt-2 pb-2 pe-3 ms-2 rounded-full w-max me-2 border-2 border-indigo-500
+                        <span class="text-white text-sm">
+                            Ver Perfil
+                        </span>
+                    </button>
+                    <button class="ps-3 pt-2 pb-2 pe-3 ms-2 rounded-full w-max me-2 border-2 border-indigo-500
                         hover:bg-indigo-100 transition-colors duration-300"
-                            [routerLink]="'chat/profile/'+profile.profileId">
-                            <span class="text-indigo-500 text-sm">
-                                Mensaje
-                            </span>
-                        </button>
-                    </div>
+                        [routerLink]="'chat/profile/'+profile.profileId">
+                        <span class="text-indigo-500 text-sm">
+                            Mensaje
+                        </span>
+                    </button>
                 </div>
             </div>
-            
         </div>
         <ng-template #noProfiles class="text-center">
             <div class="flex justify-center">

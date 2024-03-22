@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EmployeeService } from '../../../services/employee.service';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { EmployerService } from '../../../services/employer.service';
 import { CommonModule } from '@angular/common';
+import { ProfileService } from '../../../services/profile.service';
 
 @Component({
   selector: 'app-view-employee',
@@ -15,17 +16,26 @@ import { CommonModule } from '@angular/common';
 export class ViewEmployeeComponent {
 
   constructor(private router: Router , private employerService:EmployerService,
-    private route:ActivatedRoute) {}
+    private route:ActivatedRoute, private profileService:ProfileService) {}
 
   profileId : number;
   employee$!: Observable<any>;
-
+  image : string;
   ngOnInit() {
     this.route.params.subscribe(params=>{
       this.profileId = this.route.snapshot.params['profileId'];
       this.employee$ = this.employerService.getEmployee(this.profileId);
+      this.loadImage()
     })
 
   }
+
+  loadImage(): void {
+    this.profileService.getOtherProfileImage(this.profileId).pipe(
+       map(blob => {
+         return URL.createObjectURL(blob);
+       })
+     ).subscribe(image=>this.image = image);
+   }
 
 }

@@ -21,7 +21,6 @@ export class ChatComponent {
 
   profileId : number;
 
-
   getCurrentUserSubscription:Subscription;
   currentUser : User;
 

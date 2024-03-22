@@ -3,7 +3,7 @@
         <div *ngIf="user$ | async as user; else loader" data-aos="fade-down" data-aos-duration="1200">
             <div class="p-0 h-44 bg-indigo-400 relative">
                 <div class="absolute left-5 top-1/2 centrar-y">
-                    <div class="w-32 h-32 border-2 rounded-full border-indigo-300 bg-indigo-300 p-1 relative">
+                    <div class="w-32 h-32 border-2 rounded-full border-indigo-300 bg-indigo-300  p-1 relative">
                         <div *ngIf="image$ | async as image; else imageNull" class="h-full w-full" data-aos="fade-in" data-aos-duration="1200">
                             <img [src]="image" class="h-full w-full object-cover object-center rounded-full" alt="">
                         </div>
