@@ -1,28 +1,33 @@
 <div class="text-center flex flex-col h-80vh " [ngClass]="{'items-center':!historicalMessages$}">
   <div *ngIf="receiverProfile$ | async as profile" class="bg-indigo-300 w-full flex justify-start p-2 mb-4">
     <div class="flex items-center ms-2">
-      <img src="../../../assets/img/anonimo.png" class="w-8 h-8" alt="">
+      @if(image != null){
+        <img [src]="image" class="object-cover object-center rounded-full w-10 h-10" alt="">
+        }
+        @else {
+        <img src="../../../assets/img/anonimo.png" class="rounded-full w-10 h-10" alt="">
+        }
       <h1 class="ms-2 text-lg">{{profile.name}}</h1>
     </div>
   </div>
-  <div *ngIf="historicalMessages$ | async as messages; else loader" data-aos="zoom-in" data-aos-duration="1200"
+  <div *ngIf="historicalMessages$ | async as messages;" data-aos="zoom-in" data-aos-duration="1200"
     class="">
     <div *ngFor="let item of messages" class="flex w-full ps-4 pe-4 pt-2 pb-2"
       [ngClass]="{'justify-end':this.profileId == item.sender.profileId}">
-      <div class="ps-4 pe-4 pb-2 pt-2 w-max mb-6" [ngClass]="{'bg-indigo-300':this.profileId == item.sender.profileId,
+      <div class="ps-4 pe-4 pb-2 pt-2 w-max mb-6 rounded-md" [ngClass]="{'bg-indigo-300':this.profileId == item.sender.profileId,
       'bg-indigo-100':this.profileId != item.sender.profileId}">
         <h2 class="text-lg">{{item.content}}</h2>
         <h6 class="text-sm mt-1">{{formatDate(item.date)}}</h6>
       </div>
     </div>
   </div>
-  <ng-template #loader>
-    <img src="../../../../assets/img/cargando.png" class="h-12 w-12 animate-spin" alt="">
-  </ng-template>
+  @if(!historicalMessages$){
+      <img src="../../../../assets/img/cargando.png" class="h-12 w-12 animate-spin" alt="">
+  }
   <!-- Mensajes de tiempo real -->
-  <div *ngFor="let item of messageList" class="flex w-full ps-4 pe-4  pt-2 pb-2" 
+  <div *ngFor="let item of messageList" class="flex w-full ps-4 pe-4 pt-2 pb-2" 
     [ngClass]="{'justify-end':this.profileId == item.sender.profileId}">
-    <div class="w-max mb-6 ps-4 pe-4 pb-2 pt-2" [ngClass]="{'bg-indigo-300':this.profileId == item.sender.profileId,
+    <div class="w-max mb-6 ps-4 pe-4 pb-2 pt-2 rounded-md" [ngClass]="{'bg-indigo-300':this.profileId == item.sender.profileId,
       'bg-indigo-100':this.profileId != item.sender.profileId}">
       <h2 class="text-lg">{{item.content}}</h2>
       <h6 class="text-sm mt-1">{{formatDate(item.date)}}</h6>

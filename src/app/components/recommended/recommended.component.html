@@ -1,5 +1,5 @@
-<div class="ms-8 me-8">
-    <div class="p-4 rounded-md bg-white text-center border-2 border-violet-900 mt-6 ">
+<div class="ms-8 me-8 ">
+    <div class="p-4 recommended rounded-md bg-white text-center border-2 border-violet-900 mt-6 ">
         <h1 class="text-center text-xl">
             Perfiles que te recomendamos contactar
         </h1>
@@ -8,7 +8,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
                     @if(profile.image != null){
-                    <img [src]="profile.image" class="rounded-full w-12 h-12" alt="">
+                    <img [src]="profile.image" class="object-cover object-center rounded-full w-12 h-12" alt="">
                     }
                     @else {
                     <img src="../../../assets/img/anonimo.png" class="rounded-full w-12 h-12" alt="">

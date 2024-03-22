@@ -5,9 +5,10 @@ import { ChatService } from '../../services/chat.service';
 import { ChatMessage } from '../../model/chat-message';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Message } from '../../model/message';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, map } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
+import { Profile } from '../../model/profile';
 
 
 
@@ -28,6 +29,8 @@ export class MessagesComponent{
   historicalMessages$! : Observable<any[]>
   receiverProfile$! : Observable<any>
 
+  image : string ;
+
   constructor(private chatService:ChatService, private route:ActivatedRoute,private router:Router
     ,private authService:AuthService,private datePipe: DatePipe, private profileService:ProfileService) {
   }
@@ -38,15 +41,27 @@ export class MessagesComponent{
       this.historicalMessages$ = null;
       this.receiverId = params['receiverId'];
       this.receiverProfile$ = this.profileService.getProfile(this.receiverId);
+      this.receiverProfile$.subscribe(profile=>{
+        this.loadImage(profile);
+      })
       this.getCurrentUserSubscription = this.authService.get().subscribe(user=>{
         this.profileId = user.profile.profileId;
         this.historicalMessages$ = this.chatService.getChatMessages(this.receiverId,this.profileId);
       })
     });
     this.listenerMessage();
-
-
   }
+
+  loadImage(profile: any): void {
+    let image = this.profileService.getOtherProfileImage(profile.profileId).pipe(
+       map(blob => {
+         return URL.createObjectURL(blob);
+       })
+     );
+    image.subscribe(image=>{
+       this.image = image;
+    });
+   }
 
   sendMessage(){
     const chatMessage = {

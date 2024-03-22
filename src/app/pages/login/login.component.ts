@@ -114,7 +114,7 @@ export class LoginComponent {
             this.router.navigate(['/employer/profile'])
         })   
       }, responseErr => {
-        if (responseErr.status === 403) {
+        if (responseErr.status === 401) {
           Swal.fire({
             icon: 'error',
             title: 'Credenciales incorrectas',
