@@ -1,0 +1,12 @@
+.border-red{
+    border-color: red;
+}
+
+.disabled{
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+textarea{
+    resize: none;
+}

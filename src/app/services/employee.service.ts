@@ -5,6 +5,7 @@ import { Skill } from '../model/skill';
 import { Profile } from '../model/profile';
 import { Employee } from '../model/employee';
 import { Employer } from '../model/employer';
+import { Project } from '../model/project';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,14 @@ export class EmployeeService {
 
   public addSkill(title:string):Observable<Skill>{
     return this.http.post<Skill>(this.apiUrl+"addSkill?title="+title,null);
+  }
+
+  public addProject(project:Project):Observable<any>{
+    return this.http.post<Project>(this.apiUrl+"addProject",project);
+  }
+
+  public deleteProject(projectId:number):Observable<any>{
+    return this.http.delete(this.apiUrl+ "deleteProject/"+projectId);
   }
 
   public deleteSkill(skillId:number):Observable<any>{

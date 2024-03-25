@@ -1,7 +1,7 @@
 export class Project {
     name : string;
-    image : string;
+    image : Uint8Array;
     description : string;
-    start : Date;
-    end : Date;
+    start : string;
+    end : string;
 }

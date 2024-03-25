@@ -7,3 +7,9 @@
     overflow-y: scroll;
 }
 
+.modal-open{
+    background-color: rgba(0, 0, 0,.8)!important;
+    z-index: 1000;
+    overflow: hidden;
+}
+

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProfileService } from '../../../services/profile.service';
 import { EmployeeService } from '../../../services/employee.service';
 import { SkillService } from '../../../services/skill.service';
@@ -10,52 +10,64 @@ import { Skill } from '../../../model/skill';
 import { User } from '../../../model/user';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
+import { AddProjectComponent } from '../../../components/add-project/add-project.component';
+import { Project } from '../../../model/project';
 
 @Component({
   selector: 'app-employee-profile',
   standalone: true,
-  imports: [ReactiveFormsModule,CommonModule,FormsModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule,AddProjectComponent],
   templateUrl: './employee-profile.component.html',
   styleUrl: './employee-profile.component.css'
 })
 export class EmployeeProfileComponent {
+  editProjectSubscription: Subscription;
   constructor(private authService: AuthService, private router: Router
     , private profileService: ProfileService, private skillService: SkillService
-    , private fb: FormBuilder, private employeeService: EmployeeService) {
-    this.user$ = this.authService.get().pipe(catchError(error => {
-      this.authService.logout();
-      this.router.navigate(['/login']);
-      throw new Error;
-    }));
+    , private employeeService: EmployeeService) {
+    this.getCurrentUser();
     this.skills$ = this.skillService.getSkills();
     this.loadImage();
   }
-
   user$!: Observable<any>;
 
   skills$!: Observable<Skill[]>;
   addSkill: boolean = false;
-  image$! : Observable<any>;
+  image$!: Observable<any>;
 
   editOccupationSubscription: Subscription;
   editSearchingSubscription: Subscription;
   editDescriptionSubscription: Subscription;
   addSkillSubscription: Subscription;
   deleteSkillSubscription: Subscription;
+  deleteProjectSubscription: Subscription;
 
   skill = new FormControl('Angular');
 
   role: string;
-  imageUrl : string;
+  imageUrl: string;
 
   selectedFile: File;
- 
+
+  openedModal: boolean = false;
+
   ngOnInit() {
     this.role = this.authService.getUserRol();
   }
 
+  getCurrentUser(){
+    this.user$ = this.authService.get().pipe(catchError(error => {
+      this.authService.logout();
+      this.router.navigate(['/login']);
+      throw new Error;
+    }));
+  }
 
-  public editName(user: User): void {
+  toggleModal() {
+    this.openedModal = !this.openedModal;
+  }
+
+   editName(user: User): void {
     Swal.fire({
       title: 'Editar nombre',
       html: '<input type="text" (input)="getSkillsContaining()" id="modal-input" placeholder="Tu nuevo nombre aqui" class="text-center rounded-md border border-color-gray p-2 w-full transition duration-500 focus:border-violet-800 focus:outline-none">',
@@ -70,7 +82,7 @@ export class EmployeeProfileComponent {
     });
   }
 
-  public editOccupation(user: User): void {
+   editOccupation(user: User): void {
     Swal.fire({
       title: 'Editar ocupacion',
       html: '<input type="text" id="modal-input" placeholder="Tu nueva ocupacion aqui" class="text-center rounded-md border border-color-gray p-2 w-full transition duration-500 focus:border-violet-800 focus:outline-none">',
@@ -85,8 +97,7 @@ export class EmployeeProfileComponent {
     });
   }
 
-
-  public editDescription(user: User): void {
+   editDescription(user: User): void {
     Swal.fire({
       title: 'Editar descripcion',
       html: '<textarea type="text" id="modal-input" placeholder="Tu nueva descripcion aqui" rows="4" cols="50" class="text-center rounded-md border border-color-gray p-2 w-full transition duration-500 focus:border-violet-800 focus:outline-none">',
@@ -101,15 +112,15 @@ export class EmployeeProfileComponent {
     });
   }
 
-  public formSkill(): void {
+   formSkill(): void {
     this.addSkill = true;
   }
 
-  public closeFormSkill(): void {
+   closeFormSkill(): void {
     this.addSkill = false;
   }
 
-  public saveSkill(event: Event, user: any): void {
+   saveSkill(event: Event, user: any): void {
     event.preventDefault();
     if (this.skill.valid) {
       Swal.fire({
@@ -132,7 +143,7 @@ export class EmployeeProfileComponent {
     }
   }
 
-  public deleteSkill(skillId: number, user: any) {
+   deleteSkill(skillId: number, user: any) {
     Swal.fire({
       title: 'Eliminar skill',
       html: '¿Estás seguro de que deseas eliminar la skill?',
@@ -149,11 +160,35 @@ export class EmployeeProfileComponent {
     });
   }
 
+   deleteProject(projectId: number, user: any) {
+    Swal.fire({
+      title: 'Eliminar proyecto',
+      html: '¿Estás seguro de que deseas eliminar el proyecto?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Guardar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#8a2be2',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        user.profile.projects = user.profile.projects.filter(project => project.projectId !== projectId)
+        this.deleteProjectSubscription = this.employeeService.deleteProject(projectId).subscribe();
+      };
+    });
+  }
+
+  //Output
+  receiveAddedProject(project:Project){
+    //Close modal after the user add a project
+    this.openedModal = false;
+  
+  }
+
   onFileSelected(event) {
     this.selectedFile = <File>event.target.files[0];
     this.onUpload();
   }
-  
+
   loadImage(): void {
     this.image$ = this.profileService.getImage().pipe(
       map(blob => {
@@ -161,16 +196,12 @@ export class EmployeeProfileComponent {
       })
     );
   }
-    
 
   onUpload() {
-    this.profileService.uploadImage(this.selectedFile).subscribe(()=>{
+    this.profileService.uploadImage(this.selectedFile).subscribe(() => {
       this.loadImage();
     });
   }
-
-  
-   
 
   ngOnDestroy() {
     if (this.addSkillSubscription)
@@ -187,6 +218,9 @@ export class EmployeeProfileComponent {
 
     if (this.deleteSkillSubscription)
       this.deleteSkillSubscription.unsubscribe();
+
+    if(this.deleteProjectSubscription)
+      this.deleteProjectSubscription.unsubscribe();
   }
 
 

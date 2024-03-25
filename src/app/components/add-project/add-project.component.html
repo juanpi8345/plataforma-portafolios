@@ -1,0 +1,71 @@
+<form [formGroup]="projectForm" class="w-full" (ngSubmit)="saveProject()">
+    <div class="mt-4 text-left">
+        <label for="name" class="block text-sm font-medium text-gray-600">Nombre del proyecto</label>
+        <input type="text" class="rounded-md border border-color-gray p-2 w-full transition duration-500
+focus:border-violet-800 focus:outline-none mt-1" placeholder="Ingrese el nombre del proyecto. (Max 100 caracteres)"
+            [ngClass]="{'border-red': projectForm.get('name')?.invalid && projectForm.get('name')?.touched }"
+            formControlName="name" maxlength="100">
+        <div *ngIf="projectForm.get('name')?.hasError('required') &&
+projectForm.get('name')?.touched" class="text-sm text-red-500 mt-2">
+            Por favor ingresa el nombre del proyecto.
+        </div>
+    </div>
+    <div class="mt-4 text-left">
+        <label for="descripcion" class="block text-sm font-medium text-gray-600">Descripcion del proyecto</label>
+        <textarea name="" id="" cols="5" rows="5" class="rounded-md border border-color-gray p-2 w-full transition duration-500
+        focus:border-violet-800 focus:outline-none mt-1"
+            placeholder="Ingrese la descripcion del proyecto. (Max 800 caracteres)"
+            [ngClass]="{'border-red': projectForm.get('description')?.invalid && projectForm.get('description')?.touched }"
+            formControlName="description" maxlength="800"></textarea>
+        <div *ngIf="projectForm.get('description')?.hasError('required') &&
+projectForm.get('description')?.touched" class="text-sm text-red-500 mt-2">
+            Por favor ingresa la descripcion del proyecto.
+        </div>
+    </div>
+    <div class="mt-4 text-left flex">
+        <div class="w-1/2">
+            <label for="start" class="block text-sm font-medium text-gray-600">Fecha de inicio del proyecto</label>
+            <input type="date" class="rounded-md border border-color-gray p-2 w-full transition duration-500
+focus:border-violet-800 focus:outline-none mt-1" placeholder="Ingrese la fecha inicio del proyecto"
+                [ngClass]="{'border-red': projectForm.get('start')?.invalid && projectForm.get('start')?.touched }"
+                formControlName="start" [max]="currentDate" [(ngModel)]="startDate">
+            <div *ngIf="projectForm.get('start')?.hasError('required') &&
+    projectForm.get('start')?.touched" class="text-sm text-red-500 mt-2">
+                Por favor ingresa la fecha de inicio del proyecto
+            </div>
+        </div>
+        <div class="w-1/2 ms-2">
+            <label for="start" class="block text-sm font-medium text-gray-600">Fecha de finalizacion del
+                proyecto</label>
+            <input type="date" class="rounded-md border border-color-gray p-2 w-full transition duration-500
+    focus:border-violet-800 focus:outline-none mt-1" placeholder="Ingrese la fecha inicio del proyecto"
+                [ngClass]="{'border-red': projectForm.get('end')?.invalid && projectForm.get('end')?.touched }"
+                formControlName="end" [max]="currentDate" [(ngModel)]="finishDate">
+            <div *ngIf="projectForm.get('end')?.hasError('required') &&
+        projectForm.get('end')?.touched" class="text-sm text-red-500 mt-2">
+                Por favor ingresa la fecha de finalizacion del proyecto
+            </div>
+        </div>
+    </div>
+    <div class="mt-8 text-left flex">
+        <div>
+            <label for="file-upload" class="cursor-pointer bg-white rounded-full">
+                Subir imagen (Opcional)
+                <input type="file" id="file-upload" accept="image/*" class="hidden" (change)="onFileSelected($event)">
+                <img src="../../../../assets/img/flecha-arriba.png" class="w-8 h-8 ">
+            </label>
+        </div>
+        <div class="ms-4">
+            @if(image != null){
+            <img [src]="image" class="w-1/3" alt="">
+            }@else {
+
+            }
+        </div>
+
+    </div>
+    <button [disabled]="projectForm.invalid ||
+    startDate== null || finishDate == null" type="submit" class="bg-indigo-500 relative text-white mt-8 p-2 rounded-md hover:bg-indigo-600 
+w-full transition-colors duration-300" [ngClass]="{'disabled': projectForm.invalid  ||
+                               startDate == null || finishDate== null}">Agregar proyecto</button>
+</form>
