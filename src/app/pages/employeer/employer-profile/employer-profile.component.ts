@@ -190,6 +190,12 @@ export class EmployerProfileComponent {
       })
     );
   }
+
+  deleteProfilePhoto(){
+    this.profileService.deleteImage().subscribe(()=>{
+      this.loadImage();
+    },err=>{Swal.fire("Error","Error al eliminar la imagen","error")})
+  }
     
 
   onUpload() {

@@ -32,7 +32,7 @@ export class EmployerService {
   }
 
   public deleteSearchedSkill(skillId:number):Observable<any>{
-    return this.http.delete(this.apiUrl + "deleteSkill/"+skillId);
+    return this.http.delete(this.apiUrl + "delete/skill/"+skillId);
   }
 
 

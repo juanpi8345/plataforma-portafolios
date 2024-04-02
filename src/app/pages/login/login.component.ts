@@ -114,7 +114,7 @@ export class LoginComponent {
             this.router.navigate(['/employer/profile'])
         })   
       }, responseErr => {
-        if (responseErr.status === 401) {
+        
           Swal.fire({
             icon: 'error',
             title: 'Credenciales incorrectas',
@@ -122,16 +122,9 @@ export class LoginComponent {
             confirmButtonColor: '#8a2be2',
           });
           this.loading = false;
-        }
+        
       })
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error inesperado',
-        text: 'Por favor contacte con el administrador',
-        confirmButtonColor: '#8a2be2',
-      });
-    }
+    } 
   }
 
 

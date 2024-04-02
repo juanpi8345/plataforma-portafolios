@@ -23,7 +23,7 @@ export class AuthService {
   }
 
   public get():Observable<any>{
-    return this.http.get<User>(this.apiUrl + "get").pipe(delay(2000));
+    return this.http.get<User>(this.apiUrl + "get");
   }
 
   //localstorage

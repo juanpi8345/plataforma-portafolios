@@ -1,26 +1,23 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 import { EmployeeService } from '../../services/employee.service';
 import { Project } from '../../model/project';
-import Swal from 'sweetalert2';
-import { EmployeeProfileComponent } from '../../pages/employee/employee-profile/employee-profile.component';
-import { AuthService } from '../../services/auth.service';
 import { User } from '../../model/user';
-
+import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-add-project',
+  selector: 'app-edit-project',
   standalone: true,
-  imports: [ReactiveFormsModule,CommonModule,FormsModule],
-  templateUrl: './add-project.component.html',
-  styleUrl: './add-project.component.css'
+  imports: [ReactiveFormsModule,CommonModule],
+  templateUrl: './edit-project.component.html',
+  styleUrl: './edit-project.component.css'
 })
-export class AddProjectComponent {
-
+export class EditProjectComponent {
   constructor(private fb:FormBuilder, private datePipe:DatePipe,
-    private employeeService:EmployeeService,private authService:AuthService){
+    private employeeService:EmployeeService
+    ,private authService:AuthService){
     
   }
   
@@ -76,5 +73,4 @@ export class AddProjectComponent {
   formatDate(date:Date) {
     return this.datePipe.transform(date, 'yyyy-MM-dd') || null;
   }
-
 }

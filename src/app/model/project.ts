@@ -1,6 +1,7 @@
 export class Project {
+    projectId:number;
     name : string;
-    image : Uint8Array;
+    image : string;
     description : string;
     start : string;
     end : string;

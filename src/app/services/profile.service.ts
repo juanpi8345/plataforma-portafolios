@@ -24,11 +24,14 @@ export class ProfileService {
   public getImage():Observable<any>{
     return this.http.get(this.apiUrl+"get/image",{ responseType: 'blob' });
   }
+
+  public deleteImage():Observable<any>{
+    return this.http.delete(this.apiUrl+"delete/image");
+  }
   
   public getOtherProfileImage(profileId:number):Observable<any>{
     return this.http.get(this.apiUrl+profileId+"/get/image",{ responseType: 'blob' });
   }
-  
 
   public getRecommended():Observable<any>{
     return this.http.get(this.apiUrl+"get/recommended").pipe(catchError(error=>{

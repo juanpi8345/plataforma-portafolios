@@ -1,4 +1,4 @@
-<div class="ms-8 me-8 ">
+<div class="md:ms-8 md:me-8 ms-2 me-2">
     <div class="p-4 recommended rounded-md bg-white text-center border-2 border-violet-900 mt-6 ">
         <h1 class="text-center text-xl">
             Perfiles que te recomendamos contactar
@@ -17,14 +17,14 @@
                         {{profile.name}}
                     </h1>
                 </div>
-                <div>
-                    <button class="bg-indigo-500 ps-3 pt-2 pb-2 pe-3 ms-2 rounded-full w-max me-2
+                <div clas>
+                    <button class="bg-indigo-500 ps-3 pt-2 pb-2 pe-3 ms-2 mt-2 rounded-full w-max me-2
                         hover:bg-indigo-600 transition-colors duration-300" [routerLink]='"view/"+profile.profileId'>
                         <span class="text-white text-sm">
                             Ver Perfil
                         </span>
                     </button>
-                    <button class="ps-3 pt-2 pb-2 pe-3 ms-2 rounded-full w-max me-2 border-2 border-indigo-500
+                    <button class="ps-3 pt-2 pb-2 pe-3 ms-2 mt-2 rounded-full w-max me-2 border-2 border-indigo-500
                         hover:bg-indigo-100 transition-colors duration-300"
                         [routerLink]="'chat/profile/'+profile.profileId">
                         <span class="text-indigo-500 text-sm">

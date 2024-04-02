@@ -12,11 +12,12 @@ import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
 import { AddProjectComponent } from '../../../components/add-project/add-project.component';
 import { Project } from '../../../model/project';
+import { EditProjectComponent } from '../../../components/edit-project/edit-project.component';
 
 @Component({
   selector: 'app-employee-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, FormsModule,AddProjectComponent],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, AddProjectComponent,EditProjectComponent],
   templateUrl: './employee-profile.component.html',
   styleUrl: './employee-profile.component.css'
 })
@@ -33,7 +34,7 @@ export class EmployeeProfileComponent {
 
   skills$!: Observable<Skill[]>;
   addSkill: boolean = false;
-  image$!: Observable<any>;
+  profileImage$!: Observable<any>;
 
   editOccupationSubscription: Subscription;
   editSearchingSubscription: Subscription;
@@ -48,26 +49,42 @@ export class EmployeeProfileComponent {
   imageUrl: string;
 
   selectedFile: File;
+  projectSelectedFile: File;
 
   openedModal: boolean = false;
+  editProject : boolean = false;
+
 
   ngOnInit() {
     this.role = this.authService.getUserRol();
+   
   }
 
-  getCurrentUser(){
+  getCurrentUser() {
     this.user$ = this.authService.get().pipe(catchError(error => {
       this.authService.logout();
       this.router.navigate(['/login']);
       throw new Error;
+      //Hay que agregar las imagenes de los proyectos
+      //El get de profile seria muy grande si tambien recibe las imagenes
+    }),map((user: any) => {
+      user.profile.projects.forEach(project => {
+        this.employeeService.getProjectImage(project.projectId).subscribe(imageUrl => {
+          project.image = imageUrl;
+        });
+      });
+      return user;
     }));
   }
+
 
   toggleModal() {
     this.openedModal = !this.openedModal;
   }
 
-   editName(user: User): void {
+
+
+  editName(user: User): void {
     Swal.fire({
       title: 'Editar nombre',
       html: '<input type="text" (input)="getSkillsContaining()" id="modal-input" placeholder="Tu nuevo nombre aqui" class="text-center rounded-md border border-color-gray p-2 w-full transition duration-500 focus:border-violet-800 focus:outline-none">',
@@ -82,7 +99,7 @@ export class EmployeeProfileComponent {
     });
   }
 
-   editOccupation(user: User): void {
+  editOccupation(user: User): void {
     Swal.fire({
       title: 'Editar ocupacion',
       html: '<input type="text" id="modal-input" placeholder="Tu nueva ocupacion aqui" class="text-center rounded-md border border-color-gray p-2 w-full transition duration-500 focus:border-violet-800 focus:outline-none">',
@@ -97,7 +114,7 @@ export class EmployeeProfileComponent {
     });
   }
 
-   editDescription(user: User): void {
+  editDescription(user: User): void {
     Swal.fire({
       title: 'Editar descripcion',
       html: '<textarea type="text" id="modal-input" placeholder="Tu nueva descripcion aqui" rows="4" cols="50" class="text-center rounded-md border border-color-gray p-2 w-full transition duration-500 focus:border-violet-800 focus:outline-none">',
@@ -112,15 +129,21 @@ export class EmployeeProfileComponent {
     });
   }
 
-   formSkill(): void {
+  formSkill(): void {
     this.addSkill = true;
   }
 
-   closeFormSkill(): void {
+  closeFormSkill(): void {
     this.addSkill = false;
   }
 
-   saveSkill(event: Event, user: any): void {
+  deleteProfilePhoto(){
+    this.profileService.deleteImage().subscribe(()=>{
+      this.loadImage();
+    },err=>{Swal.fire("Error","Error al eliminar la imagen","error")})
+  }
+
+  saveSkill(event: Event, user: any): void {
     event.preventDefault();
     if (this.skill.valid) {
       Swal.fire({
@@ -143,7 +166,7 @@ export class EmployeeProfileComponent {
     }
   }
 
-   deleteSkill(skillId: number, user: any) {
+  deleteSkill(skillId: number, user: any) {
     Swal.fire({
       title: 'Eliminar skill',
       html: '¿Estás seguro de que deseas eliminar la skill?',
@@ -160,7 +183,7 @@ export class EmployeeProfileComponent {
     });
   }
 
-   deleteProject(projectId: number, user: any) {
+  deleteProject(projectId: number, user: any) {
     Swal.fire({
       title: 'Eliminar proyecto',
       html: '¿Estás seguro de que deseas eliminar el proyecto?',
@@ -177,11 +200,15 @@ export class EmployeeProfileComponent {
     });
   }
 
+  toggleEditProject(){
+    this.editProject = !this.editProject;
+  }
+
   //Output
-  receiveAddedProject(project:Project){
+  receiveAddedProject(project:Project) {
     //Close modal after the user add a project
     this.openedModal = false;
-  
+    
   }
 
   onFileSelected(event) {
@@ -189,18 +216,53 @@ export class EmployeeProfileComponent {
     this.onUpload();
   }
 
+  onFileProjectSelected(event, project:Project) {
+    this.projectSelectedFile = <File>event.target.files[0];
+    this.onUploadImageProject(project);
+  }
+
   loadImage(): void {
-    this.image$ = this.profileService.getImage().pipe(
+    this.profileImage$ = this.profileService.getImage().pipe(
       map(blob => {
         return URL.createObjectURL(blob);
       })
     );
   }
 
+  // loadProjectImage(projectId:number): void {
+  //   this.projectImage$ = this.employeeService.getProjectImage(projectId).pipe(
+  //     map(blob => {
+  //       return URL.createObjectURL(blob);
+  //     })
+  //   );;
+    
+  // }
+
+
   onUpload() {
     this.profileService.uploadImage(this.selectedFile).subscribe(() => {
       this.loadImage();
+    },err=>{
+      Swal.fire("Error","Error al subir la imagen","error")
     });
+  }
+
+  onUploadImageProject(project:Project){
+    this.employeeService.uploadProjectImage(this.projectSelectedFile,project.projectId).subscribe(()=>{
+         this.employeeService.getProjectImage(project.projectId).subscribe(data=>{
+          project.image = data;
+        })
+    },err=>{
+      Swal.fire("Imagen demasiado grande","La imagen es demasiado grande y/o pesada","error")
+    })
+  }
+
+  deleteProjectImage(project:Project){
+    this.employeeService.deleteProjectImage(project.projectId).subscribe(()=>{
+      this.employeeService.getProjectImage(project.projectId).subscribe(data=>{
+        project.image = data;
+      })
+    },err=>{Swal.fire("Error al eliminar la imagen","Ocurrio un error al intentar eliminar la imagen","error")});
   }
 
   ngOnDestroy() {
@@ -219,7 +281,7 @@ export class EmployeeProfileComponent {
     if (this.deleteSkillSubscription)
       this.deleteSkillSubscription.unsubscribe();
 
-    if(this.deleteProjectSubscription)
+    if (this.deleteProjectSubscription)
       this.deleteProjectSubscription.unsubscribe();
   }
 
