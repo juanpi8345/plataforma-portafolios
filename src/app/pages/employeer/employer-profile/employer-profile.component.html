@@ -1,5 +1,5 @@
-<div class="mx-auto md:me-20 md:ms-20 pb-2 ps-2 pe-2" data-aos="fade-in" data-aos-duration="1500">
-    <div class="pb-12 rounded-md bg-white text-center h-85vh relative">
+<div class="mx-auto 2xl:me-20 2xl:ms-20 pb-2 ps-2 pe-2" data-aos="fade-in" data-aos-duration="1500">
+    <div class="pb-12 rounded-md bg-white text-center md:h-85vh relative">
         <div *ngIf="user$ | async as user; else loader" data-aos="fade-in" data-aos-duration="1200">
             <div class="p-0 h-44 bg-indigo-400 relative">
                 <div class="absolute left-5 top-1/2 centrar-y">
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="md:ps-4 md:pe-4 ps-2 pe-2 mt-4">
-                <div class="md:flex md:justify-between">
+                <div class="2xl:flex 2xl:justify-between">
                     <div class="flex p-1">
                         <h1 class="text-left text-2xl me-2">{{user.profile.name}}</h1>
                         <div class="w-8 h-8 border rounded-full flex justify-center items-center cursor-pointer"
@@ -40,7 +40,7 @@
                     <div class="flex items-center p-1">
                         <h4 class="text-left mt-2 text-lg italic">
                             @if(user.profile.occupations == null){
-                                IT-Recluter
+                                Aqui su ocupacion
                             }@else {
                                 {{user.profile.occupations}}
                             }
@@ -89,7 +89,7 @@
                         <p class="mt-2"> No tiene habilidades agregadas.</p>
                     }@else {
                     <div class="flex justify-around mt-4 flex-wrap">
-                        <div class="p-4 md:w-1/6 w-full m-6 rounded-md bg-white text-center shadow-md relative"
+                        <div class="p-4 md:w-1/2 2xl:w-1/6 xl:w-1/4 lg:w-1/3 sm:w-full m-6 rounded-md bg-white text-center shadow-md relative"
                             *ngFor="let skill of user.profile.searchedSkills">
                             <img [src]="skill.image" class="h-24 w-24 mx-auto" alt="">
                             <h1 class="mt-1 text-lg italic text-indigo-300 p-2">{{skill.title}}</h1>

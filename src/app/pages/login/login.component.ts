@@ -88,14 +88,7 @@ export class LoginComponent {
             confirmButtonColor: '#8a2be2',
           });
         }
-        else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error inesperado',
-            text: 'Por favor contacte con el administrador',
-            confirmButtonColor: '#8a2be2',
-          });
-        }
+
       })
     } 
   }
